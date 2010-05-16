@@ -197,7 +197,7 @@ function longPoll (data) {
          , type: "GET"
          , url: "/recv"
          , dataType: "json"
-         , data: { since: CONFIG.last_message_time, id: CONFIG.id }
+         , data: { since: CONFIG.last_message_time, room: CONFIG.room, id: CONFIG.id }
          , error: function () {
              addMessage("", "long poll error. trying again...", new Date(), "error");
              transmission_errors += 1;
@@ -221,7 +221,7 @@ function send(msg) {
   if (CONFIG.debug === false) {
     // XXX should be POST
     // XXX should add to messages immediately
-    jQuery.get("/send", {id: CONFIG.id, text: msg}, function (data) { }, "json");
+    jQuery.get("/send", {id: CONFIG.id, room: CONFIG.room, text: msg}, function (data) { }, "json");
   }
 }
 
@@ -296,7 +296,7 @@ function outputUsers () {
 
 //get a list of the users presently in the room, and add it to the stream
 function who () {
-  jQuery.get("/who", {}, function (data, status) {
+  jQuery.get("/who", {room:CONFIG.room}, function (data, status) {
     if (status != "success") return;
     nicks = data.nicks;
     outputUsers();
@@ -340,7 +340,7 @@ $(document).ready(function() {
            , type: "GET" // XXX should be POST
            , dataType: "json"
            , url: "/join"
-           , data: { nick: nick }
+           , data: { nick: nick , room: CONFIG.room}
            , error: function () {
                alert("error connecting to server");
                showConnect();
