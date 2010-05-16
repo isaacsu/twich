@@ -7,7 +7,7 @@ body, #entry {
   color: #eee;
 }
 body, table {
-  font-family: DejaVu Sans Mono, fixed; 
+  font-family: Verdana, DejaVu Sans Mono, fixed; 
   font-size: 14pt;
   line-height: 150%;
 }
@@ -40,7 +40,7 @@ a:hover { text-decoration: underline; color: #aaa; }
 #connect { z-index: 10000001; }
 
 #loading p, #connect fieldset  {
-  font-family: DejaVu Sans Mono, fixed; 
+  font-family: Verdana, DejaVu Sans Mono, fixed; 
   width: 30em;
   border: 0;
 }

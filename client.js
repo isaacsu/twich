@@ -254,9 +254,9 @@ function showChat (nick) {
 //we want to show a count of unread messages when the window does not have focus
 function updateTitle(){
   if (CONFIG.unread) {
-    document.title = "(" + CONFIG.unread.toString() + ") node chat";
+    document.title = "(" + CONFIG.unread.toString() + ") twich.me/"+CONFIG.room;
   } else {
-    document.title = "node chat";
+    document.title = "twich.me/"+CONFIG.room;
   }
 }
 
@@ -341,8 +341,8 @@ $(document).ready(function() {
            , dataType: "json"
            , url: "/join"
            , data: { nick: nick , room: CONFIG.room}
-           , error: function () {
-               alert("error connecting to server");
+           , error: function (session) {
+               alert("error " + session.error);
                showConnect();
              }
            , success: onConnect

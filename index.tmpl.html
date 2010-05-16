@@ -3,17 +3,17 @@
     <link rel="stylesheet" href="style.css" type="text/css"/>
     <script src="jquery-1.2.6.min.js" type="text/javascript"></script>
     <script src="client.js" type="text/javascript"></script>
-    <title>node chat <%=room%></title>
+    <title>twich.me/<%=room%></title>
   </head>
   <body>
     <div id="app">
       <div id="connect">
         <form action="#">
           <fieldset> 
-            <p>
-              This is a chat room. Both the client-side and server-side are
-              written in javascript. The source code is
-              <a href="http://github.com/ry/node_chat/tree/master">here</a>.
+              <h1 style='color:#aaa'>twich.me/<span style='color:#fff'><%=room%></a></h1>
+            <p style='color:#aaa'>
+            Welcome to the <span style='color:#fff'><%=room%></span> twich room.<br />
+            Please enter your name below to continue.
             </p>
 
             <label for="nick">Name</label>
