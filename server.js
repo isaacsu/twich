@@ -127,9 +127,13 @@ var SimpleJSON = function (code, obj, res) {
 }
 
 http.createServer(new Sherpa.interfaces.NodeJs([
-    //['/', fu.staticHandler('index.html')],
     ['/', function (req,res) { 
-        res.writeHead(307, {'Location':'http://twich.me/default'});
+	var hs = req.headers
+	for (var h in hs) {
+		sys.puts(h + " " + hs[h]);
+	}
+	sys.puts(req.connection.remoteAddress)
+        res.writeHead(307, {'Location':'http://' + req.headers['host'] + '/default'});
         res.end();
     
     }],
