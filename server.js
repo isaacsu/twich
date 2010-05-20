@@ -123,7 +123,6 @@ setInterval(function () {
 }, 1000);
 var SimpleJSON = function (code, obj, res) {
     var body = JSON.stringify(obj);
-    log(body);
     res.writeHead(code, { "Content-Type": "text/json"
                       , "Content-Length": body.length
                       });
