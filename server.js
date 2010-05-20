@@ -1,6 +1,7 @@
 HOST = null; // localhost
 PORT = 80;
 
+    
 var MESSAGE_BACKLOG = 200,
     SESSION_TIMEOUT = 60 * 1000;
 
@@ -12,20 +13,18 @@ var fu = require("./lib/fu"),
     qs = require("querystring"),
     template = require("./lib/template");
 
-var log = function(msg) {
-    sys.puts(ts.timeStamp() + msg);
-}
-
     require ('./lib/sherpa');
-    //require ('./testdate');
 
-var channel = new function () {
+var log = function(msg) { sys.puts(ts.timeStamp() + msg); }
+
+var channel = new function() {
     var messages = [],
         callbacks = [];
 
     this.appendMessage = function (nick, room, type, text) {
-        var m = { nick: nick
-            , type: type // "msg", "join", "part"
+        var m = { 
+                  nick: nick
+                , type: type // "msg", "join", "part"
                 , text: text
                 , room: room
                 , timestamp: (new Date()).getTime()
@@ -69,14 +68,14 @@ var channel = new function () {
         }
     };
 
-    // clear old callbacks
-    // they can hang around for at most 30 seconds.
-    setInterval(function () {
-        var now = new Date();
-        while (callbacks.length > 0 && now - callbacks[0].timestamp > 30*1000) {
-            callbacks.shift().callback([]);
-        }
-    }, 3000);
+        // clear old callbacks
+        // they can hang around for at most 30 seconds.
+        setInterval(function () {
+            var now = new Date();
+            while (callbacks.length > 0 && now - callbacks[0].timestamp > 30*1000) {
+                callbacks.shift().callback([]);
+            }
+        }, 3000);
 };
 
 var sessions = {};
@@ -124,6 +123,7 @@ setInterval(function () {
 }, 1000);
 var SimpleJSON = function (code, obj, res) {
     var body = JSON.stringify(obj);
+    log(body);
     res.writeHead(code, { "Content-Type": "text/json"
                       , "Content-Length": body.length
                       });
@@ -180,20 +180,20 @@ http.createServer(new Sherpa.interfaces.NodeJs([
 
         if (nick == null || nick.length == 0) {
             log(" " + 'bad nick');
-            SimpleJSON(400, {error: "Bad nick."},res);
+            SimpleJSON(200, {error: "Bad nick."},res);
         return;
         }
 
         if (room== null || room.length == 0) {
             log(" " + 'bad room');
-            SimpleJSON(400, {error: "Bad room."},res);
+            SimpleJSON(200, {error: "Bad room."},res);
         return;
         }
 
         var session = createSession(nick,room);
         if (session == null) {
             log(" " + 'nick in use');
-            SimpleJSON(400, {error: "Nick in use"},res);
+            SimpleJSON(200, {error: "Nick in use"},res);
         return;
         }
 
@@ -215,7 +215,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
 
     ["/recv", function (req, res) {
         if (!qs.parse(url.parse(req.url).query).since) {
-            SimpleJSON(400, { error: "Must supply since parameter" },res);
+            SimpleJSON(200, { error: "Must supply since parameter" },res);
             return;
         }
 
@@ -251,7 +251,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
 
         var session = sessions[id];
         if (!session || !text) {
-            SimpleJSON(400, { error: "No such session id" },res);
+            SimpleJSON(200, { error: "No such session id" },res);
             return; 
         }
 
