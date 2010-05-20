@@ -305,9 +305,20 @@ function who () {
 
 $(document).ready(function() {
 
+    if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) { 
+        $('#entry').css('width','80%');
+        $('#entry-btn').css('width','9%').css('display','inline');
+    }
+
   //submit new messages when the user hits enter if the message isnt blank
   $("#entry").keypress(function (e) {
     if (e.keyCode != 13 /* Return */) return;
+    var msg = $("#entry").attr("value").replace("\n", "");
+    if (!util.isBlank(msg)) send(msg);
+    $("#entry").attr("value", ""); // clear the entry field.
+  });
+
+  $("#entry-btn").click(function () {
     var msg = $("#entry").attr("value").replace("\n", "");
     if (!util.isBlank(msg)) send(msg);
     $("#entry").attr("value", ""); // clear the entry field.
@@ -372,6 +383,7 @@ $(document).ready(function() {
   longPoll();
 
   showConnect();
+  //showChat();
 });
 
 //if we can, notify the server that we're going away.
