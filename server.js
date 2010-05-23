@@ -1,6 +1,5 @@
 HOST = null; // localhost
 PORT = 80;
-
     
 var MESSAGE_BACKLOG = 200,
     SESSION_TIMEOUT = 60 * 1000;
@@ -15,7 +14,7 @@ var fu = require("./lib/fu"),
 
     require ('./lib/sherpa');
 
-var log = function(msg) { sys.puts(ts.timeStamp() + msg); }
+var log = function(msg) { sys.puts(ts.timeStamp() + " " + msg); }
 
 var channel = new function() {
     var messages = [],
@@ -32,13 +31,13 @@ var channel = new function() {
 
         switch (type) {
             case "msg":
-                log(" <" + nick + "> in " + room + " " + text);
+                log("msg <" + room + "/" + nick + "> " + text);
             break;
             case "join":
-                log(" " + nick + " joined " + room);
+                log("joi <" + room + "/" + nick + ">");
             break;
             case "part":
-                log(" " + nick + " left " + room);
+                log("lef <" + room + "/" + nick + ">");
             break;
         }
 
@@ -121,6 +120,7 @@ setInterval(function () {
         }
     }
 }, 1000);
+
 var SimpleJSON = function (code, obj, res) {
     var body = JSON.stringify(obj);
     res.writeHead(code, { "Content-Type": "text/json"
@@ -129,21 +129,22 @@ var SimpleJSON = function (code, obj, res) {
     res.end(body);
 }
 
-
 http.createServer(new Sherpa.interfaces.NodeJs([
     ['/', function (req,res) { 
-    if (req.headers['referer']) {
-    	log(" Hello " + req.connection.remoteAddress + " " + req.headers['referer']);
-    } else {
-    	log(" " + req.connection.remoteAddress);
-    }
+        if (req.headers['referer']) {
+            log(req.connection.remoteAddress + " / " + req.headers['referer']);
+        } 
+        else {
+            log(req.connection.remoteAddress + " /");
+        }
         res.writeHead(307, {'Location':'http://' + req.headers['host'] + '/default'});
         res.end();
-    
+        
     }],
     ["/style.css", fu.staticHandler("style.css")],
     ["/client.js", fu.staticHandler("client.js")],
-    ["/jquery-1.2.6.min.js", fu.staticHandler("jquery-1.2.6.min.js")],
+    ["/jquery-1.4.2.min.js", fu.staticHandler("jquery-1.4.2.min.js")],
+    ["/jquery.scrollTo-1.4.2-min.js", fu.staticHandler("jquery.scrollTo-1.4.2-min.js")],
 
     ["/entry", function (req, res) {
         // r = room
@@ -162,11 +163,11 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         var nicks = [];
         var room = qs.parse(url.parse(req.url).query).room;
         for (var id in sessions) {
-        if (!sessions.hasOwnProperty(id)) continue;
-        if (session.room == room) {
-        var session = sessions[id];
-        nicks.push(session.nick);
-        }
+            if (!sessions.hasOwnProperty(id)) continue;
+            if (session.room == room) {
+                var session = sessions[id];
+                nicks.push(session.nick);
+            }
         }
         SimpleJSON(200, { nicks: nicks },res);
     }],
@@ -175,28 +176,26 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         var nick = qs.parse(url.parse(req.url).query).nick;
         var room = qs.parse(url.parse(req.url).query).room;
 
-        log(" " + nick + ' attempts to join ' + room);
+        log('ajo <' + room + '/' + nick + '>');
 
         if (nick == null || nick.length == 0) {
-            log(" " + 'bad nick');
+            log('bad nick');
             SimpleJSON(200, {error: "Bad nick."},res);
-        return;
+            return;
         }
 
         if (room== null || room.length == 0) {
-            log(" " + 'bad room');
+            log('bad room');
             SimpleJSON(200, {error: "Bad room."},res);
-        return;
+            return;
         }
 
         var session = createSession(nick,room);
         if (session == null) {
-            log(" " + 'nick in use');
+            log('nick in use');
             SimpleJSON(200, {error: "Nick in use"},res);
-        return;
+            return;
         }
-
-       log(" connection: " + nick + "@" + res.connection.remoteAddress);
 
         channel.appendMessage(session.nick, session.room, "join");
         SimpleJSON(200, { id: session.id, nick: session.nick},res);
@@ -206,8 +205,8 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         var id = qs.parse(url.parse(req.url).query).id;
         var session;
         if (id && sessions[id]) {
-        session = sessions[id];
-        session.destroy();
+            session = sessions[id];
+            session.destroy();
         }
         SimpleJSON(200, { },res);
     }],
@@ -222,9 +221,9 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         var session;
         var room = qs.parse(url.parse(req.url).query).room;
         if (id && sessions[id]) {
-        session = sessions[id];
-        session.poke();
-        log(' ' + session.nick + " asked for messages in " + room);
+            session = sessions[id];
+            session.poke();
+            log('png <' + room + '/' + session.nick + '>');
         }
 
         var since = parseInt(qs.parse(url.parse(req.url).query).since, 10);
@@ -234,10 +233,10 @@ http.createServer(new Sherpa.interfaces.NodeJs([
             var matching = [];
 
             for (var i = 0; i < messages.length; i++) {
-            var message = messages[i];
-            if (message.room == room) {
-            matching.push(message)
-            }
+                var message = messages[i];
+                if (message.room == room) {
+                    matching.push(message)
+                }
             }
             SimpleJSON(200, { messages: matching},res);
         });
@@ -260,12 +259,12 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         SimpleJSON(200, {},res);
     }],
 
-    ["/:room", {matchesWith: {room: /^(?!favicon.ico|client.js|jquery-1.2.6.min.js|style.css|entry|send|recv|part|join|who).*$/}}, function (req, res) {
+    ["/:room", {matchesWith: {room: /^(?!favicon.ico|client.js|jquery.scrollTo-1.4.2-min.js|jquery-1.4.2.min.js|style.css|entry|send|recv|part|join|who).*$/}}, function (req, res) {
 
         if (req.headers['referer']) {
-            log(" :room " + req.sherpaResponse.params['room'] + ' ' + req.connection.remoteAddress + " " + req.headers['referer']);
+            log(req.connection.remoteAddress + " /" + req.sherpaResponse.params['room'] + ' ' + req.headers['referer']);
         } else {
-            log(" :room " + req.sherpaResponse.params['room'] + ' ' + req.connection.remoteAddress);
+            log(req.connection.remoteAddress + " /" + req.sherpaResponse.params['room']);
         }
 
         // r = room
@@ -285,7 +284,6 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         */
     }]
 
-
 ]).listener()).listen(PORT);
 
-log(" Server running on port " + PORT);
+log("Server running on port " + PORT);
