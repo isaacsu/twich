@@ -431,7 +431,6 @@ $(window).unload(function () {
   jQuery.get("/part", {id: CONFIG.id}, function (data) { }, "json");
 });
 
-/*
 $(window).bind('resize',function() {
     resizeLog();
-});*/
+});
