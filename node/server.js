@@ -11,52 +11,56 @@ var HOST = null,
 
     require ('./lib/sherpa');
     require ('./lib/log');
+    require ('./lib/simplejsonp');
+
+var sessions = {};
 
 var channel = new function() {
     var messages  = [],
         callbacks = [];
 
-    this.appendMessage = function (nick, room, type, text) {
-        var m = { 
-                  nick: nick
-                , type: type // "msg", "join", "part"
-                , text: text
-                , room: room
-                , timestamp: (new Date()).getTime()
+    this.appendMessage = 
+        function (nick, room, type, text) {
+            var m = { 
+                      nick: nick
+                    , type: type // "msg", "join", "part"
+                    , text: text
+                    , room: room
+                    , timestamp: (new Date()).getTime()
+            };
+
+            mlog(m);
+
+            messages.push( m );
+
+            while (callbacks.length > 0) {
+                callbacks.shift().callback([m]);
+            }
+
+            while (messages.length > MESSAGE_BACKLOG) {
+                messages.shift();
+            }
         };
 
-        mlog(m);
-
-        messages.push( m );
-
-        while (callbacks.length > 0) {
-            callbacks.shift().callback([m]);
-        }
-
-        while (messages.length > MESSAGE_BACKLOG) {
-            messages.shift();
-        }
-    };
-
-    this.query = function (room, since, callback) {
-        var matching = [];
-        for (var i = 0; i < messages.length; i++) {
-            var message = messages[i];
-            if (message.timestamp > since && room == message.room) {
-                matching.push(message)
+    this.query = 
+        function (room, since, callback) {
+            var matching = [];
+            for (var i = 0; i < messages.length; i++) {
+                var message = messages[i];
+                if (message.timestamp > since && room == message.room) {
+                    matching.push(message)
+                }
             }
-        }
 
-        if (matching.length != 0) {
-            callback(matching);
-        } 
-        else {
-            callbacks.push({ timestamp: new Date(), callback: callback });
-        }
-    };
+            if (matching.length != 0) {
+                callback(matching);
+            } 
+            else {
+                callbacks.push({ timestamp: new Date(), callback: callback });
+            }
+        };
 
-    // clear old callbacks
-    // they can hang around for at most 30 seconds.
+    // clear old callbacks older than 30 seconds
     setInterval(function () {
         var now = new Date();
         while (callbacks.length > 0 && now - callbacks[0].timestamp > 30*1000) {
@@ -66,7 +70,6 @@ var channel = new function() {
 
 };
 
-var sessions = {};
 
 function createSession (nick, room) {
     if (nick.length > 50) return null;
@@ -109,17 +112,6 @@ setInterval(function () {
         }
     }
 }, 1000);
-
-var SimpleJSONP = function (code, obj, res,req) {
-    var body = JSON.stringify(obj);
-    var jpf = qs.parse(url.parse(req.url).query).jp;
-    body = jpf + '(' + body + ');';
-    
-    res.writeHead(code, { "Content-Type": "text/json"
-                      , "Content-Length": body.length
-                      });
-    res.end(body);
-}
 
 http.createServer(new Sherpa.interfaces.NodeJs([
     ['/', 

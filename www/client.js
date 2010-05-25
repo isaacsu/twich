@@ -219,7 +219,7 @@ function longPoll (data) {
             transmission_errors += 1;
             //don't flood the servers on error, wait 10 seconds before retrying
             setTimeout(longPoll, 10*1000);
-        }
+          }
         , success: function (data) {
             transmission_errors = 0;
             //if everything went well, begin another request immediately
@@ -228,7 +228,7 @@ function longPoll (data) {
             //and then it will return it to us and close the connection.
             //since the connection is closed when we get data, we longPoll again
             longPoll(data);
-        }
+          }
     });
 }
 
@@ -263,6 +263,7 @@ function showLoad () {
 }
 
 
+
 //transition the page to the main chat view, putting the cursor in the textfield
 function showChat (nick) {
     $("#toolbar").show();
@@ -275,10 +276,13 @@ function showChat (nick) {
 }
 
 
+
 function resizeLog() {
     var newHeight = $(window).height() - 100;
     $('#log').css('height',newHeight + "px");
 }
+
+
 
 //we want to show a count of unread messages when the window does not have focus
 function updateTitle() {
@@ -357,78 +361,78 @@ $(document).ready(function() {
         $("#entry").attr("value", ""); // clear the entry field.
     });
 
-  $("#entry-btn").click(function () {
-    var msg = $("#entry").attr("value").replace("\n", "");
-    if (!util.isBlank(msg)) send(msg);
-    $("#entry").attr("value", ""); // clear the entry field.
-  });
+    $("#entry-btn").click(function () {
+        var msg = $("#entry").attr("value").replace("\n", "");
+        if (!util.isBlank(msg)) send(msg);
+        $("#entry").attr("value", ""); // clear the entry field.
+    });
 
-  $("#usersLink").click(outputUsers);
+    $("#usersLink").click(outputUsers);
 
-  //try joining the chat when the user clicks the connect button
-  $("#connectButton").click(function () {
-    //lock the UI while waiting for a response
-    showLoad();
-    var nick = $("#nickInput").attr("value");
+    //try joining the chat when the user clicks the connect button
+    $("#connectButton").click(function () {
+        //lock the UI while waiting for a response
+        showLoad();
+        var nick = $("#nickInput").attr("value");
 
-    //dont bother the backend if we fail easy validations
-    if (nick.length > 50) {
-      alert("Nick too long. 50 character max.");
-      showConnect();
-      return false;
+        //dont bother the backend if we fail easy validations
+        if (nick.length > 50) {
+            alert("Nick too long. 50 character max.");
+            showConnect();
+            return false;
+        }
+
+        //more validations
+        if (/[^\w_\-^!]/.exec(nick)) {
+            alert("Bad character in nick. Can only have letters, numbers, and '_', '-', '^', '!'");
+            showConnect();
+            return false;
+        }
+
+        //make the actual join request to the server
+        $.ajax({ cache: false
+               , type: "GET" // XXX should be POST
+               , dataType: "json"
+               , url: CONFIG.node_url + "/join?jp=?"
+               , data: { nick: nick , room: CONFIG.room}
+               , error: function (session) {
+                   alert("error " + session.error);
+                   showConnect();
+                 }
+               , success: onConnect
+               });
+        return false;
+    });
+
+    // update the clock every second
+    setInterval(function () {
+        var now = new Date();
+        $("#currentTime").text(util.timeString(now));
+    }, 1000);
+
+    resizeLog();
+    if (CONFIG.debug) {
+        $("#loading").hide();
+        $("#connect").hide();
+        scrollDown();
+        return;
     }
 
-    //more validations
-    if (/[^\w_\-^!]/.exec(nick)) {
-      alert("Bad character in nick. Can only have letters, numbers, and '_', '-', '^', '!'");
-      showConnect();
-      return false;
-    }
+    // remove fixtures
+    $("#log table").remove();
 
-    //make the actual join request to the server
-    $.ajax({ cache: false
-           , type: "GET" // XXX should be POST
-           , dataType: "json"
-           , url: CONFIG.node_url + "/join?jp=?"
-           , data: { nick: nick , room: CONFIG.room}
-           , error: function (session) {
-               alert("error " + session.error);
-               showConnect();
-             }
-           , success: onConnect
-           });
-    return false;
-  });
+    //begin listening for updates right away
+    //interestingly, we don't need to join a room to get its updates
+    //we just don't show the chat stream to the user until we create a session
+    longPoll();
 
-  // update the clock every second
-  setInterval(function () {
-    var now = new Date();
-    $("#currentTime").text(util.timeString(now));
-  }, 1000);
-
-  resizeLog();
-  if (CONFIG.debug) {
-    $("#loading").hide();
-    $("#connect").hide();
-    scrollDown();
-    return;
-  }
-
-  // remove fixtures
-  $("#log table").remove();
-
-  //begin listening for updates right away
-  //interestingly, we don't need to join a room to get its updates
-  //we just don't show the chat stream to the user until we create a session
-  longPoll();
-
-  showConnect();
-  //showChat();
+    showConnect();
+    //showChat();
 });
 
 //if we can, notify the server that we're going away.
 $(window).unload(function () {
-  jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) { }, "json");
+    jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) { }, "json");
 });
 
 $(window).bind('resize',function() {
