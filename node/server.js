@@ -1,5 +1,5 @@
 HOST = null; // localhost
-PORT = 80;
+PORT = 8001;
     
 var MESSAGE_BACKLOG = 200,
     SESSION_TIMEOUT = 60 * 1000;
@@ -129,6 +129,19 @@ var SimpleJSON = function (code, obj, res) {
     res.end(body);
 }
 
+var SimpleJSONP = function (code, obj, res,req) {
+    var body = JSON.stringify(obj);
+    var jpf = qs.parse(url.parse(req.url).query).jp;
+    sys.puts(jpf);
+    body = jpf + '(' + body + ');';
+    sys.puts(body);
+    
+    res.writeHead(code, { "Content-Type": "text/json"
+                      , "Content-Length": body.length
+                      });
+    res.end(body);
+}
+
 http.createServer(new Sherpa.interfaces.NodeJs([
     ['/', function (req,res) { 
         if (req.headers['referer']) {
@@ -169,7 +182,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
                 nicks.push(session.nick);
             }
         }
-        SimpleJSON(200, { nicks: nicks },res);
+        SimpleJSONP(200, { nicks: nicks },res, req);
     }],
 
     ["/join", function (req, res) {
@@ -180,25 +193,25 @@ http.createServer(new Sherpa.interfaces.NodeJs([
 
         if (nick == null || nick.length == 0) {
             log('bad nick');
-            SimpleJSON(200, {error: "Bad nick."},res);
+            SimpleJSONP(200, {error: "Bad nick."},res,req);
             return;
         }
 
         if (room== null || room.length == 0) {
             log('bad room');
-            SimpleJSON(200, {error: "Bad room."},res);
+            SimpleJSONP(200, {error: "Bad room."},res,req);
             return;
         }
 
         var session = createSession(nick,room);
         if (session == null) {
             log('nick in use');
-            SimpleJSON(200, {error: "Nick in use"},res);
+            SimpleJSON(200, {error: "Nick in use"},res,req);
             return;
         }
 
         channel.appendMessage(session.nick, session.room, "join");
-        SimpleJSON(200, { id: session.id, nick: session.nick},res);
+        SimpleJSONP(200, { id: session.id, nick: session.nick},res,req);
     }],
 
     ["/part", function (req, res) {
@@ -208,12 +221,12 @@ http.createServer(new Sherpa.interfaces.NodeJs([
             session = sessions[id];
             session.destroy();
         }
-        SimpleJSON(200, { },res);
+        SimpleJSONP(200, { },res,req);
     }],
 
     ["/recv", function (req, res) {
         if (!qs.parse(url.parse(req.url).query).since) {
-            SimpleJSON(200, { error: "Must supply since parameter" },res);
+            SimpleJSONP(200, { error: "Must supply since parameter" },res,req);
             return;
         }
 
@@ -238,7 +251,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
                     matching.push(message)
                 }
             }
-            SimpleJSON(200, { messages: matching},res);
+            SimpleJSONP(200, { messages: matching},res,req);
         });
     }],
 
@@ -249,14 +262,14 @@ http.createServer(new Sherpa.interfaces.NodeJs([
 
         var session = sessions[id];
         if (!session || !text) {
-            SimpleJSON(200, { error: "No such session id" },res);
+            SimpleJSONP(200, { error: "No such session id" },res,req);
             return; 
         }
 
         session.poke();
 
         channel.appendMessage(session.nick,room, "msg", text);
-        SimpleJSON(200, {},res);
+        SimpleJSONP(200, {},res,req);
     }],
 
     ["/:room", {matchesWith: {room: /^(?!favicon.ico|client.js|jquery.scrollTo-1.4.2-min.js|jquery-1.4.2.min.js|style.css|entry|send|recv|part|join|who).*$/}}, function (req, res) {
