@@ -120,7 +120,7 @@ setInterval(function () {
         }
     }
 }, 1000);
-
+/*
 var SimpleJSON = function (code, obj, res) {
     var body = JSON.stringify(obj);
     res.writeHead(code, { "Content-Type": "text/json"
@@ -128,7 +128,7 @@ var SimpleJSON = function (code, obj, res) {
                       });
     res.end(body);
 }
-
+*/
 var SimpleJSONP = function (code, obj, res,req) {
     var body = JSON.stringify(obj);
     var jpf = qs.parse(url.parse(req.url).query).jp;
@@ -154,10 +154,6 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         res.end();
         
     }],
-    ["/style.css", fu.staticHandler("style.css")],
-    ["/client.js", fu.staticHandler("client.js")],
-    ["/jquery-1.4.2.min.js", fu.staticHandler("jquery-1.4.2.min.js")],
-    ["/jquery.scrollTo-1.4.2-min.js", fu.staticHandler("jquery.scrollTo-1.4.2-min.js")],
 
     ["/entry", function (req, res) {
         // r = room

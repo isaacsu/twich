@@ -204,23 +204,28 @@
                 <input id='entry-btn' type='button' value='Send' />
                 <input tabindex="1" type="text" id="entry"/>
             </div>
-            <script type="text/javascript">
-/*
-                var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-                document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
- */
-            </script>
             <script type='text/javascript'>
+                CONFIG.room = '<?php echo $_GET['room']?>';
+                CONFIG.host = '<?php echo $_SERVER['SERVER_NAME']?>';
+                CONFIG.port = '<?php echo '8001' ?>';
+                CONFIG.protocol = '<?php echo 'http://' ;?>';
+                CONFIG.node_url = '<?php echo 'http://' . $_SERVER['SERVER_NAME'] . ':8001'; ?>';
                 $(document).ready(function() {
-                    CONFIG.room = '<?php echo $_GET['room']?>';
-                    CONFIG.host = '<?php echo $_SERVER['SERVER_NAME']?>';
                         });
 
                     </script>
-                    <script type="text/javascript">
-                        try {
-                            var pageTracker = _gat._getTracker("UA-246664-21");
-                            pageTracker._trackPageview();
-                        } catch(err) {}</script>
                 </body>
+
+<?php if ($_SERVER['SERVER_NAME'] == 'twich.me') { ?>
+            <script type="text/javascript">
+                var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+                document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+            </script>
+            <script type="text/javascript">
+                try {
+                    var pageTracker = _gat._getTracker("UA-246664-21");
+                    pageTracker._trackPageview();
+                } catch(err) {}
+            </script>
+<?php } ?>
             </html>

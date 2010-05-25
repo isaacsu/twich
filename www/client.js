@@ -211,7 +211,7 @@ function longPoll (data) {
     $.ajax({ 
         cache: false
         , type: "GET"
-        , url: "http://deb.z:8001/recv?jp=?"
+        , url: CONFIG.node_url + "/recv?jp=?"
         , dataType: "json"
         , data: { since: CONFIG.last_message_time, room: CONFIG.room, id: CONFIG.id }
         , error: function () {
@@ -239,7 +239,7 @@ function send(msg) {
     if (CONFIG.debug === false) {
         // XXX should be POST
         // XXX should add to messages immediately
-        jQuery.get("http://deb.z:8001/send?jp=?", {id: CONFIG.id, room: CONFIG.room, text: msg}, function (data) { }, "json");
+        jQuery.get(CONFIG.node_url + "/send?jp=?", {id: CONFIG.id, room: CONFIG.room, text: msg}, function (data) { }, "json");
     }
 }
 
@@ -332,7 +332,7 @@ function outputUsers () {
 
 //get a list of the users presently in the room, and add it to the stream
 function who () {
-    jQuery.get("http://deb.z:8001/who?jp=?", {room:CONFIG.room}, function (data, status) {
+    jQuery.get(CONFIG.node_url + "/who?jp=?", {room:CONFIG.room}, function (data, status) {
             if (status != "success") return;
             if (!data) return;
             nicks = data.nicks;
@@ -389,7 +389,7 @@ $(document).ready(function() {
     $.ajax({ cache: false
            , type: "GET" // XXX should be POST
            , dataType: "json"
-           , url: "http://deb.z:8001/join?jp=?"
+           , url: CONFIG.node_url + "/join?jp=?"
            , data: { nick: nick , room: CONFIG.room}
            , error: function (session) {
                alert("error " + session.error);
@@ -428,7 +428,7 @@ $(document).ready(function() {
 
 //if we can, notify the server that we're going away.
 $(window).unload(function () {
-  jQuery.get("http://deb.z:8001/part?jp=?", {id: CONFIG.id}, function (data) { }, "json");
+  jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) { }, "json");
 });
 
 $(window).bind('resize',function() {
