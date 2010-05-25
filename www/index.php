@@ -12,7 +12,7 @@
             <div id="connect">
                 <form action="#">
                     <fieldset> 
-                        <h1 style='color:#aaa'>twich.me/<span style='color:#fff'><%=room%></span></h1>
+                    <h1 style='color:#aaa'>twich.me/<span style='color:#fff'><?php echo $_GET['room']?></span></h1>
                         <p style='color:#aaa'>
                         Welcome to the <span style='color:#fff'><%=room%></span> twich room.<br />
                         Twich is a super-quick way to start chatting with friends.</p>

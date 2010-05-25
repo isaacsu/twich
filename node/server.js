@@ -120,21 +120,11 @@ setInterval(function () {
         }
     }
 }, 1000);
-/*
-var SimpleJSON = function (code, obj, res) {
-    var body = JSON.stringify(obj);
-    res.writeHead(code, { "Content-Type": "text/json"
-                      , "Content-Length": body.length
-                      });
-    res.end(body);
-}
-*/
+
 var SimpleJSONP = function (code, obj, res,req) {
     var body = JSON.stringify(obj);
     var jpf = qs.parse(url.parse(req.url).query).jp;
-    sys.puts(jpf);
     body = jpf + '(' + body + ');';
-    sys.puts(body);
     
     res.writeHead(code, { "Content-Type": "text/json"
                       , "Content-Length": body.length
@@ -268,7 +258,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         SimpleJSONP(200, {},res,req);
     }],
 
-    ["/:room", {matchesWith: {room: /^(?!favicon.ico|client.js|jquery.scrollTo-1.4.2-min.js|jquery-1.4.2.min.js|style.css|entry|send|recv|part|join|who).*$/}}, function (req, res) {
+    ["/:room", {matchesWith: {room: /^(?!entry|send|recv|part|join|who).*$/}}, function (req, res) {
 
         if (req.headers['referer']) {
             log(req.connection.remoteAddress + " /" + req.sherpaResponse.params['room'] + ' ' + req.headers['referer']);
