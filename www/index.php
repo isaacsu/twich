@@ -5,14 +5,14 @@
         <script src="/jquery-1.4.2.min.js" type="text/javascript"></script>
         <script src="/jquery.scrollTo-1.4.2-min.js" type="text/javascript"></script>
         <script src="/client.js" type="text/javascript"></script>
-<title>twich.me/<?php echo $_GET['room']?></title>
+<title><?php echo $_SERVER['SERVER_NAME'] ?>/<?php echo $_GET['room']?></title>
     </head>
     <body>
         <div id="app">
             <div id="connect">
                 <form action="#">
                     <fieldset> 
-                    <h1 style='color:#aaa'>twich.me/<span style='color:#fff'><?php echo $_GET['room']?></span></h1>
+                    <h1 style='color:#aaa'><?php echo $_SERVER['SERVER_NAME']?>/<span style='color:#fff'><?php echo $_GET['room']?></span></h1>
                         <p style='color:#aaa'>
                         Welcome to the <span style='color:#fff'><%=room%></span> twich room.<br />
                         Twich is a super-quick way to start chatting with friends.</p>

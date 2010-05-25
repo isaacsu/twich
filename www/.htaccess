@@ -1,11 +1,13 @@
 <IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
+    RewriteEngine On
+    RewriteBase /
 
-RewriteCond %{REQUEST_URI} !(\.gif$)|(\.jpg$)|(\.png$)|(\.css$)|(\.js$) 
+    # if it's empty, forward to default room
+    RewriteCond %{REQUEST_URI} ^/$
+    RewriteRule .* default [R,L]
 
-RewriteCond %{REQUEST_URI} ^(.*)$
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ index.php?room=$1 [L,QSA]
+    RewriteCond %{REQUEST_URI} !(\.gif$)|(\.jpg$)|(\.png$)|(\.css$)|(\.js$) 
+    RewriteCond %{REQUEST_URI} ^(.*)$
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php?room=$1 [L,QSA]
 </IfModule>
-### SILVERSTRIPE END ###
