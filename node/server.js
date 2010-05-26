@@ -60,10 +60,10 @@ var channel = new function() {
             }
         };
 
-    // clear old callbacks older than 30 seconds
+    // clear old callbacks older than 25 seconds (lowered from 30 seconds to get round rmit proxy server's 30sec timeout
     setInterval(function () {
         var now = new Date();
-        while (callbacks.length > 0 && now - callbacks[0].timestamp > 30*1000) {
+        while (callbacks.length > 0 && now - callbacks[0].timestamp > 25*1000) {
             callbacks.shift().callback([]);
         }
     }, 3000);
@@ -164,7 +164,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
             var session = createSession(nick,room);
             if (session == null) {
                 log('nick in use');
-                SimpleJSON(200, {error: "Nick in use"},res,req);
+                SimpleJSONP(200, {error: "Nick in use"},res,req);
                 return;
             }
 

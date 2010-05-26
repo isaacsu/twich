@@ -263,7 +263,6 @@ function showLoad () {
 }
 
 
-
 //transition the page to the main chat view, putting the cursor in the textfield
 function showChat (nick) {
     $("#toolbar").show();
@@ -271,8 +270,8 @@ function showChat (nick) {
 
     $("#connect").hide();
     $("#loading").hide();
+    $('#log').show();
 
-    scrollDown();
 }
 
 
@@ -298,6 +297,8 @@ function updateTitle() {
 
 //handle the server's response to our nickname and join request
 function onConnect (session) {
+    //myScroll = new iScroll('entries');
+    longPoll();
     if (session.error) {
         alert("error connecting: " + session.error);
         showConnect();
@@ -410,7 +411,7 @@ $(document).ready(function() {
         $("#currentTime").text(util.timeString(now));
     }, 1000);
 
-    resizeLog();
+    //resizeLog();
     if (CONFIG.debug) {
         $("#loading").hide();
         $("#connect").hide();
@@ -424,7 +425,7 @@ $(document).ready(function() {
     //begin listening for updates right away
     //interestingly, we don't need to join a room to get its updates
     //we just don't show the chat stream to the user until we create a session
-    longPoll();
+    //longPoll();
 
     showConnect();
     //showChat();
@@ -436,5 +437,5 @@ $(window).unload(function () {
 });
 
 $(window).bind('resize',function() {
-    resizeLog();
+    //resizeLog();
 });

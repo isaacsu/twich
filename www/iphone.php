@@ -7,8 +7,9 @@
         <meta content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no" name="viewport" />
         <script type="text/javascript" src="/js/jquery-1.4.2.min.js"></script>
         <script type="text/javascript" src="/js/jquery.scrollTo-1.4.2-min.js"></script>
-        <script type="text/javascript" src="/js/client.js"></script>
-        <link rel="stylesheet" type="text/css" href="/css/style.css" />
+        <script type="text/javascript" src="/js/iscroll.js"></script>
+        <script type="text/javascript" src="/js/client_iphone.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/style_iphone.css" />
     </head>
     <body>
         <div id="app">
@@ -20,24 +21,20 @@
                     Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich room.<br />
                     Twich is a super-quick way to start chatting with friends.
                 </p>
-                <p style='color:#aaa;font-size:14px;line-height:20px;'>
-                    You're probably here because someone wanted to chat with you. <br />
-                    Just enter your name below to continue.
-                </p>
 
                 <form action="#">
                     <fieldset> 
-                        <label for="nick">Your Name&nbsp;</label>
-                        <input id="nickInput" class="text"type="text" name="nick" style='font-size:18px;padding:3px;' value=""/>
-                        <input id="connectButton" class="button" type="submit" style='height:35px; font-size:18px; width:100px' name="" value="Enter" />
+                        <label for="nick">Your Name&nbsp;</label><br />
+                        <input id="nickInput" class="text"type="text" name="nick" value=""/> <br />
+                        <input id="connectButton" class="button" type="submit" name="" value="Enter" />
                     </fieldset>
                 </form>
 
-                <p style='font-size:12px;color:#aaa;font-style:italic'>
-                    No pesky signups or registration forms - how delightful!
+                <p style='font-size:11px;color:#aaa;font-style:italic'>
+                    No pesky signups or registration forms - delight!
                 </p>
 
-                <div style='line-height:18px;font-size:14px;color:#666;margin-top:50px; font-family: Arial, sans-serif'>
+                <div style='font-size:14px;color:#666;margin-top:20px; font-family: Arial, sans-serif'>
                     <h4>Disclaimer</h4>
                     <p>
                         Please be advised that <span style='color:#aaa'>twich.me</span> is still under active development, so please do not rely on it to launch space shuttles, yet. You have been warned.
@@ -59,6 +56,7 @@
             <div id="loading"><p>loading</p></div>
 
             <div id="log">
+                <div id='entries'>
                 <table class="message"><tr><td class="date">18:58</td><td valign="top" class="nick">TTilus</td>
                         <td class="msg-text">x6a616e: i think you can, there was some weird #send trick to do that</td>
                 </tr></table>
@@ -210,6 +208,7 @@
                             more.
                         </td>
                 </tr></table>
+                </div>
             </div> <?php // end of log ?>
 
             <div id="toolbar">
@@ -223,12 +222,20 @@
         </div> <?php // end of app ?>
 
         <script type='text/javascript'>
+            var myScroll;
             CONFIG.room = '<?php echo $_GET['room']?>';
             CONFIG.host = '<?php echo $_SERVER['SERVER_NAME']?>';
             CONFIG.port = '<?php echo $PORT ?>';
             CONFIG.protocol = '<?php echo 'http://' ;?>';
             CONFIG.node_url = '<?php echo 'http://' . $_SERVER['SERVER_NAME'] . ':' . $PORT; ?>';
-            $(document).ready(function() { });
+            $(document).ready(function() { 
+                $('#log').hide();
+                //document.addEventListener('touchmove', function(e){e.preventDefault();});
+            });
+            /*function loaded() {
+                //document.addEventListener('touchmove', function(e){e.preventDefault();});
+            }*/
+            //document.addEventListener('DOMContentLoaded',loaded);
         </script>
 
         <?php if ($_SERVER['SERVER_NAME'] == 'twich.me') { ?>
