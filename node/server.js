@@ -130,14 +130,16 @@ http.createServer(new Sherpa.interfaces.NodeJs([
     ["/who", 
         function (req, res) {
             var nicks = [];
-            var room = qs.parse(url.parse(req.url).query).room;
+            var req_room = qs.parse(url.parse(req.url).query).room;
+            var req_nick = qs.parse(url.parse(req.url).query).nick;
             for (var id in sessions) {
                 if (!sessions.hasOwnProperty(id)) continue;
-                if (session.room == room) {
-                    var session = sessions[id];
-                    nicks.push(session.nick);
-                }
+                var session = sessions[id];
+                if (session.room != req_room) continue;
+                nicks.push(session.nick);
             }
+
+            log('who <' + req_room + '/' + req_nick + '> ' + nicks);
             SimpleJSONP(200, { nicks: nicks },res, req);
         }
     ],

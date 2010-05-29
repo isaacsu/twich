@@ -51,7 +51,6 @@ function userPart(nick, timestamp) {
 
 
 // utility functions
-
 util = {
     urlRE: /https?:\/\/([-\w\.]+)+(:\d+)?(\/([^\s]*(\?\S+)?)?)?/g, 
 
@@ -304,12 +303,14 @@ function onConnect (session) {
         showConnect();
         return;
     }
+    longPoll();
 
     CONFIG.nick = session.nick;
     CONFIG.id   = session.id;
 
     //update the UI to show the chat
     showChat(CONFIG.nick);
+    //addMessage('twichEvent', 'Masterchef twich tonight at 7.30PM http://twich.me/masterchef',null,'notice');
 
     //listen for browser events so we know to update the document title
     $(window).bind("blur", function() {
@@ -337,7 +338,7 @@ function outputUsers () {
 
 //get a list of the users presently in the room, and add it to the stream
 function who () {
-    jQuery.get(CONFIG.node_url + "/who?jp=?", {room:CONFIG.room}, function (data, status) {
+    jQuery.get(CONFIG.node_url + "/who?jp=?", {nick:CONFIG.nick, room:CONFIG.room}, function (data, status) {
             if (status != "success") return;
             if (!data) return;
             nicks = data.nicks;
@@ -425,7 +426,7 @@ $(document).ready(function() {
     //begin listening for updates right away
     //interestingly, we don't need to join a room to get its updates
     //we just don't show the chat stream to the user until we create a session
-    longPoll();
+    //longPoll();
 
     showConnect();
     //showChat();
