@@ -338,12 +338,17 @@ function outputUsers () {
 
 //get a list of the users presently in the room, and add it to the stream
 function who () {
-    jQuery.get(CONFIG.node_url + "/who?jp=?", {nick:CONFIG.nick, room:CONFIG.room}, function (data, status) {
-            if (status != "success") return;
-            if (!data) return;
-            nicks = data.nicks;
-            outputUsers();
-            }, "json");
+    jQuery.ajax({ cache: false
+                , type: "GET"
+                , dataType: "json"
+                , url: CONFIG.node_url + "/who?jp=?"
+                , data: {nick: CONFIG.nick, room: CONFIG.room}
+                , success: function(session) {
+                    nicks = session.nicks;
+                    outputUsers();
+                }
+    });
+
 }
 
 
