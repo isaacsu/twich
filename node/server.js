@@ -1,5 +1,5 @@
 var HOST = null,
-    PORT = 8001,
+    PORT = 443,
     MESSAGE_BACKLOG = 200,
     SESSION_TIMEOUT = 60 * 1000,
 
