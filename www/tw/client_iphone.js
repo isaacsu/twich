@@ -1,4 +1,4 @@
-var CONFIG = { debug:false 
+var CONFIG = { debug: false
              , nick: "#"   // set in onConnect
              , id: null    // set in onConnect
              , last_message_time: 1
@@ -51,6 +51,7 @@ function userPart(nick, timestamp) {
 
 
 // utility functions
+
 util = {
     urlRE: /https?:\/\/([-\w\.]+)+(:\d+)?(\/([^\s]*(\?\S+)?)?)?/g, 
 
@@ -262,7 +263,6 @@ function showLoad () {
 }
 
 
-
 //transition the page to the main chat view, putting the cursor in the textfield
 function showChat (nick) {
     $("#toolbar").show();
@@ -272,15 +272,13 @@ function showChat (nick) {
     $("#loading").hide();
     $('#log').show();
 
-    scrollDown();
 }
 
 
 
 function resizeLog() {
-    var newHeight = $(window).height() - (45 + 26);//100;
+    var newHeight = $(window).height() - 100;
     $('#log').css('height',newHeight + "px");
-    $('#entry').css('width', ($(window).width() - 30) + "px");
 }
 
 
@@ -299,19 +297,19 @@ function updateTitle() {
 
 //handle the server's response to our nickname and join request
 function onConnect (session) {
+    //myScroll = new iScroll('entries');
+    longPoll();
     if (session.error) {
         alert("error connecting: " + session.error);
         showConnect();
         return;
     }
-    longPoll();
 
     CONFIG.nick = session.nick;
     CONFIG.id   = session.id;
 
     //update the UI to show the chat
     showChat(CONFIG.nick);
-    //addMessage('twichEvent', 'Masterchef twich tonight at 7.30PM http://twich.me/masterchef',null,'notice');
 
     //listen for browser events so we know to update the document title
     $(window).bind("blur", function() {
@@ -339,17 +337,15 @@ function outputUsers () {
 
 //get a list of the users presently in the room, and add it to the stream
 function who () {
-    jQuery.ajax({ cache: false
-                , type: "GET"
-                , dataType: "json"
-                , url: CONFIG.node_url + "/who?jp=?"
-                , data: {nick: CONFIG.nick, room: CONFIG.room}
-                , success: function(session) {
-                    nicks = session.nicks;
-                    outputUsers();
-                }
-    });
+    jQuery.get(CONFIG.node_url + "/who?jp=?", {room:CONFIG.room}, function (data, status) {
+            if (status != "success") return;
+            if (!data) return;
+            nicks = data.nicks;
+            outputUsers();
+            }, "json");
 }
+
+
 
 $(document).ready(function() {
 
@@ -415,7 +411,7 @@ $(document).ready(function() {
         $("#currentTime").text(util.timeString(now));
     }, 1000);
 
-    resizeLog();
+    //resizeLog();
     if (CONFIG.debug) {
         $("#loading").hide();
         $("#connect").hide();
@@ -441,5 +437,5 @@ $(window).unload(function () {
 });
 
 $(window).bind('resize',function() {
-    resizeLog();
+    //resizeLog();
 });

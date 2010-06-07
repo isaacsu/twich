@@ -1,6 +1,5 @@
-<pre>
 <?php
-    function nulser($v) { return $v; }
+/*    function nulser($v) { return $v; }
 
     define('LB',"\n");
     require_once ('Rediska.php');
@@ -21,3 +20,16 @@
     $key->setValue($_GET['a']);
 
     echo $rediska->get('abc') . ' [' . gettype($rediska->get('abc')) . ']';
+ */?>
+<html>
+<body>
+
+<h1>Log in</h1>
+
+<form method='get' action='authenticate.php'>
+<label>Username:</label>
+<input type='text' name='username' />
+<input type='submit' value='login' />
+</form>
+</body>
+</html>

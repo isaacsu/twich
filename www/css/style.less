@@ -1,53 +1,128 @@
+/* v1.0 | 20080212 */html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent;}body { line-height: 1;}ol, ul { list-style: none;}blockquote, q { quotes: none;}blockquote:before, blockquote:after,q:before, q:after { content: ''; content: none;}/* remember to define focus styles! */:focus { outline: 0;}/* remember to highlight inserts somehow! */ins { text-decoration: none;}del { text-decoration: line-through;}/* tables still need 'cellspacing="0"' in the markup */table { border-collapse: collapse; border-spacing: 0;}
+
 body {
-    padding: 0;
-    margin: 0;
+    color:#eee;
+    background:#22252a;
+    font-family: Arial,Verdana, DejaVu Sans Mono, fixed; 
+    font-size: 14px;
+    line-height: 20px;
 }
-
-body, #entry {
-    background: #22252a;
-    color: #eee;
-}
-
-body, table {
-    font-family: Verdana, DejaVu Sans Mono, fixed; 
-    font-size: 14pt;
-    line-height: 150%;
-}
-
-
-tr,td,table {
-    padding: 0;
-    margin: 0;
-    outline-width: 0;
-    border-width: 0;
-}
-
-table {
-    border-collapse: collapse;
-    border-spacing: 0
-}
-
 
 a { text-decoration: none; color: #888; }
 a:hover { text-decoration: underline; color: #aaa; }
 
-#loading, #connect {
+#connect {
     background: #22252a;
     position: fixed;
     top: 0;
     left: 0;
-//    width: 100%;
     height: 100%;
     padding: 1em;
+    z-index: 10000001; 
+    h1 {
+        font-size:28px;
+        padding:16px 0;
+        color:#aaa;
+    }
+    p {
+        color:#aaa;
+        margin-bottom:8px;
+        font-size:14px;
+        line-height:20px;
+    }
+
+    p.footnote {
+        font-size:12px;
+        color:#aaa;
+        font-style:italic;
+    }
+
+    div.disclaimer {
+        line-height:18px;
+        font-size:14px;
+        color:#666;
+        margin-top:50px;
+        width:400px;
+
+        h4 {
+            font-size:18px;
+            padding:10px 0;
+        }
+
+        
+        p {
+            color:#666;
+        }
+
+        ul {
+            font-size:12px;
+            padding-left:25px;
+            margin-bottom:8px;
+
+            li {
+                padding-left:5px;
+                list-style:square;
+            }
+        }
+    }
 }
 
-#loading { z-index: 10000000; }
-#connect { z-index: 10000001; }
+#loading  {
+    background: #22252a;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 1em;
+    z-index: 10000000; 
+}
 
 #loading p, #connect fieldset  {
-    font-family: Verdana, DejaVu Sans Mono, fixed; 
     width: 30em;
     border: 0;
+}
+
+#log {
+    display: block;
+    height:100px;
+    overflow: auto;
+
+    table {
+        font-size: 14px;
+        line-height: 20px;
+        border-collapse: collapse;
+        border-spacing: 0;
+        outline-width: 0;
+        border-width: 0;
+
+        tr,td {
+            outline-width: 0;
+            border-width: 0;
+        }
+    }
+
+    .message {
+        margin: 0.1em 0;
+        margin-left:10px;
+
+        td {
+            vertical-align: top;
+        }
+    }
+
+    .notice td, .join td, .part td, .message .date { color: #555; }
+    .error td { color: #933; }
+    .personal .nick, .notice .nick { color: #cd5; }
+
+    .nick { 
+        font-weight: bold;
+        padding: 0 1em 0 0.5em;
+        padding-left:15px;
+
+        a {
+            color: inherit;
+        }
+    }
 }
 
 #toolbar {
@@ -56,84 +131,50 @@ a:hover { text-decoration: underline; color: #aaa; }
     width: 100%; 
     bottom: 0;
     height: 99px;
-    /*background: #733;*/
-}
+    height: 71px;
 
-#entry {
-    /*width: 90%;*/
-    width: 100%;
-    font-size: inherit;
-    padding: 1em;
-    margin: 0;
-    border-width: 0;
-    outline-width: 0;
-    clear: both;
-}
+    #entry {
+        background: #22252a;
+        color: #eee;
+        width: 90%;
+        padding:15px;
+        font-size: inherit;
+        border-width: 0;
+        outline-width: 0;
+        clear: both;
+    }
 
-#entry-btn {
-    display:none;
-    /*width:9%;*/
-}
+    #entry-btn {
+        display:none;
+    }
 
-#log {
-    display: block;
-    height:100px;
-    /* enough padding to clear the toolbar.. is there a better way to do this? */
-    background: inherit;
-    overflow: auto;
-}
-
-/* not very important info */
-.notice td, .join td, .part td, .message .date { color: #555; }
-.error td { color: #933; }
-.personal .nick, .notice .nick { color: #cd5; }
-
-.message {
-    margin: 0.1em 0;
-    margin-left:10px;
-}
-
-.message td {
-    vertical-align: top;
-}
-
-.nick { 
-    font-weight: bold;
-    padding: 0 1em 0 0.5em;
-    padding-left:15px;
-}
-
-.nick a {
-    color: inherit;
-}
-
-#toolbar {
     #status {
         display:block;
         width:100%;
-        height:30px;
+        height:22px;
         background: #733;
         margin: 0;
         padding: 0;
         list-style: none;
+
         li {
             display: block; 
             float: left;
             margin: 0 2em 0 0;
-            height:20px;
             margin-top:4px;
             line-height:100%;
         }
+
         #currentTime {
             margin-left:10px;
             margin-right:15px;
         }
-        #currentUsers {
 
+        #currentUsers {}
+
+        #usersLink {
+            color: inherit;
         }
     }
 }
 
-#usersLink {
-    color: inherit;
-}
