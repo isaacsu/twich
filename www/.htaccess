@@ -6,6 +6,13 @@
     RewriteCond %{REQUEST_URI} ^/$
     RewriteRule .* default [R,L]
 
+    RewriteCond %{HTTP_USER_AGENT} (iPod|iPhone|iPad)
+    RewriteCond %{REQUEST_URI} !(\.gif$)|(\.jpg$)|(\.png$)|(\.css$)|(\.js$) 
+    RewriteCond %{REQUEST_URI} ^(.*)$
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ iphone.php?room=$1 [L,QSA]
+
     RewriteCond %{REQUEST_URI} !(\.gif$)|(\.jpg$)|(\.png$)|(\.css$)|(\.js$) 
     RewriteCond %{REQUEST_URI} ^(.*)$
     RewriteCond %{REQUEST_FILENAME} !-f

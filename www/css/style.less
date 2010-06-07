@@ -31,6 +31,16 @@ a:hover { text-decoration: underline; color: #aaa; }
         line-height:20px;
     }
 
+    #nickInput {
+        font-size:18px;
+        padding:3px;
+    }
+    #connectButton {
+        height:35px;
+        font-size:18px;
+        width:100px;
+    }
+
     p.footnote {
         font-size:12px;
         color:#aaa;
@@ -82,45 +92,47 @@ a:hover { text-decoration: underline; color: #aaa; }
     border: 0;
 }
 
-#log {
+#logwrap {
     display: block;
     height:100px;
     overflow: auto;
+    #log {
 
-    table {
-        font-size: 14px;
-        line-height: 20px;
-        border-collapse: collapse;
-        border-spacing: 0;
-        outline-width: 0;
-        border-width: 0;
-
-        tr,td {
+        table {
+            font-size: 14px;
+            line-height: 20px;
+            border-collapse: collapse;
+            border-spacing: 0;
             outline-width: 0;
             border-width: 0;
+
+            tr,td {
+                outline-width: 0;
+                border-width: 0;
+            }
         }
-    }
 
-    .message {
-        margin: 0.1em 0;
-        margin-left:10px;
+        .message {
+            margin: 0.1em 0;
+            margin-left:10px;
 
-        td {
-            vertical-align: top;
+            td {
+                vertical-align: top;
+            }
         }
-    }
 
-    .notice td, .join td, .part td, .message .date { color: #555; }
-    .error td { color: #933; }
-    .personal .nick, .notice .nick { color: #cd5; }
+        .notice td, .join td, .part td, .message .date { color: #555; }
+        .error td { color: #933; }
+        .personal .nick, .notice .nick { color: #cd5; }
 
-    .nick { 
-        font-weight: bold;
-        padding: 0 1em 0 0.5em;
-        padding-left:15px;
+        .nick { 
+            font-weight: bold;
+            padding: 0 1em 0 0.5em;
+            padding-left:15px;
 
-        a {
-            color: inherit;
+            a {
+                color: inherit;
+            }
         }
     }
 }

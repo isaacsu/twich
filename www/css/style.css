@@ -68,6 +68,15 @@ a:hover {
   font-size: 14px;
   line-height: 20px;
 }
+#connect #nickInput {
+  font-size: 18px;
+  padding: 3px;
+}
+#connect #connectButton {
+  height: 35px;
+  font-size: 18px;
+  width: 100px;
+}
 #connect p.footnote {
   font-size: 12px;
   color: #aaaaaa;
@@ -111,12 +120,12 @@ a:hover {
   width: 30em;
   border: 0;
 }
-#log {
+#logwrap {
   display: block;
   height: 100px;
   overflow: auto;
 }
-#log table {
+#logwrap #log table {
   font-size: 14px;
   line-height: 20px;
   border-collapse: collapse;
@@ -124,32 +133,32 @@ a:hover {
   outline-width: 0;
   border-width: 0;
 }
-#log table tr {
+#logwrap #log table tr {
   outline-width: 0;
   border-width: 0;
 }
-#log table td {
+#logwrap #log table td {
   outline-width: 0;
   border-width: 0;
 }
-#log .message {
+#logwrap #log .message {
   margin: 0.1em 0;
   margin-left: 10px;
 }
-#log .message td { vertical-align: top; }
-#log .notice td { color: #555555; }
-#log .join td { color: #555555; }
-#log .part td { color: #555555; }
-#log .message .date { color: #555555; }
-#log .error td { color: #993333; }
-#log .personal .nick { color: #ccdd55; }
-#log .notice .nick { color: #ccdd55; }
-#log .nick {
+#logwrap #log .message td { vertical-align: top; }
+#logwrap #log .notice td { color: #555555; }
+#logwrap #log .join td { color: #555555; }
+#logwrap #log .part td { color: #555555; }
+#logwrap #log .message .date { color: #555555; }
+#logwrap #log .error td { color: #993333; }
+#logwrap #log .personal .nick { color: #ccdd55; }
+#logwrap #log .notice .nick { color: #ccdd55; }
+#logwrap #log .nick {
   font-weight: bold;
   padding: 0 1em 0 0.5em;
   padding-left: 15px;
 }
-#log .nick a { color: inherit; }
+#logwrap #log .nick a { color: inherit; }
 #toolbar {
   position: fixed;
   color: #ffffff;

@@ -19,8 +19,8 @@
                 <form action="#">
                     <fieldset> 
                         <label for="nick">Your Name&nbsp;</label>
-                        <input id="nickInput" class="text"type="text" name="nick" style='font-size:18px;padding:3px;' value=""/>
-                        <input id="connectButton" class="button" type="submit" style='height:35px; font-size:18px; width:100px' name="" value="Enter" />
+                        <input id="nickInput" class="text"type="text" name="nick" value=""/>
+                        <input id="connectButton" class="button" type="submit" name="" value="Enter" />
                     </fieldset>
                 </form>
 
@@ -53,6 +53,7 @@
 * Log Panel
 ********************/ 
 ?>
+<div id='logwrap'>
             <div id="log">
                 <table class="message"><tr><td class="date">18:58</td><td valign="top" class="nick">TTilus</td>
                         <td class="msg-text">x6a616e: i think you can, there was some weird #send trick to do that</td>
@@ -206,6 +207,7 @@
                         </td>
                 </tr></table>
             </div> <?php // end of log ?>
+            </div><?php // end of logwrap ?>
 
 <?php
 /*******************
@@ -217,8 +219,8 @@
                     <li class="date" id="currentTime">12:59</li>
                     <li id='currentUsers'><a id="usersLink" href="#">5 users</a></li>
                 </ul>
-                <input id='entry-btn' type='button' value='Send' />
                 <input tabindex="1" type="text" id="entry"/>
+                <input id='entry-btn' type='button' value='Send' />
             </div> <?php //end of toolbar ?>
 
 

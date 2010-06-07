@@ -1,4 +1,4 @@
-var CONFIG = { debug:false 
+var CONFIG = { debug:false
              , nick: "#"   // set in onConnect
              , id: null    // set in onConnect
              , last_message_time: 1
@@ -92,7 +92,13 @@ util = {
 
 //used to keep the most recent messages visible
 function scrollDown () {
-    $('#log').scrollTo('max');
+    if (CONFIG.client == 'mobilesafari') {
+        updateSizes();
+        myScroll.scrollToMax('400ms');
+    }
+    else {
+        $('#logwrap').scrollTo('max');
+    }
     $("#entry").focus();
 }
 
@@ -168,10 +174,14 @@ function longPoll (data) {
         return;
     }
 
-    //process any updates we may have
-    //data will be null on the first call of longPoll
+    // process any updates we may have
+    // data will be null on the first call of longPoll
     if (data && data.messages) {
-        for (var i = 0; i < data.messages.length; i++) {
+        var msgStart = 0;
+        if (CONFIG.client=='mobilesafari' && data.messages.length > 15) {
+            msgStart = data.messages.length - 15;
+        }
+        for (var i = msgStart; i < data.messages.length; i++) {
             var message = data.messages[i];
 
             //track oldest message so we only request newer messages from server
@@ -243,7 +253,6 @@ function send(msg) {
 }
 
 
-
 //Transition the page to the state that prompts the user for a nickname
 function showConnect () {
     $("#connect").show();
@@ -262,15 +271,13 @@ function showLoad () {
 }
 
 
-
 //transition the page to the main chat view, putting the cursor in the textfield
 function showChat (nick) {
     $("#toolbar").show();
     $("#entry").focus();
-
     $("#connect").hide();
     $("#loading").hide();
-    $('#log').show();
+    $('#logwrap').show();
 
     scrollDown();
 }
@@ -279,7 +286,7 @@ function showChat (nick) {
 
 function resizeLog() {
     var newHeight = $(window).height() - (45 + 26);//100;
-    $('#log').css('height',newHeight + "px");
+    $('#logwrap').css('height',newHeight + "px");
     $('#entry').css('width', ($(window).width() - 30) + "px");
 }
 
@@ -305,6 +312,9 @@ function onConnect (session) {
         return;
     }
     longPoll();
+    if (CONFIG.client =='mobilesafari') {
+        document.addEventListener('touchmove', function(e){e.preventDefault();});
+    }
 
     CONFIG.nick = session.nick;
     CONFIG.id   = session.id;
@@ -352,11 +362,6 @@ function who () {
 }
 
 $(document).ready(function() {
-
-    if((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i))) { 
-        $('#entry').css('width','80%');
-        $('#entry-btn').css('width','9%').css('display','inline');
-    }
 
     //submit new messages when the user hits enter if the message isnt blank
     $("#entry").keypress(function (e) {
@@ -415,11 +420,9 @@ $(document).ready(function() {
         $("#currentTime").text(util.timeString(now));
     }, 1000);
 
-    resizeLog();
     if (CONFIG.debug) {
         $("#loading").hide();
         $("#connect").hide();
-        scrollDown();
         return;
     }
 
@@ -440,6 +443,3 @@ $(window).unload(function () {
     jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) { }, "json");
 });
 
-$(window).bind('resize',function() {
-    resizeLog();
-});
