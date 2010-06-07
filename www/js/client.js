@@ -5,7 +5,11 @@ var CONFIG = { debug:false
              , focus: true //event listeners bound in onConnect
              , unread: 0 //updated in the message-processing loop
              };
+var STATE = {
+    entryfocused: true
+};
 
+var OEMBED = {};
 var nicks = [];
 
 //updates the users link to reflect the number of active users
@@ -30,7 +34,6 @@ function userJoin(nick, timestamp) {
     //update the UI
     updateUsersLink();
 }
-
 
 
 //handles someone leaving
@@ -85,6 +88,12 @@ util = {
     isBlank: function(text) {
         var blank = /^\s*$/;
         return (text.match(blank) !== null);
+    },
+
+    frHTMLEntities: function (str) {
+      var ta=document.createElement("textarea");
+      ta.innerHTML=str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      return ta.value;
     }
 };
 
@@ -92,17 +101,23 @@ util = {
 
 //used to keep the most recent messages visible
 function scrollDown () {
-    if (CONFIG.client == 'mobilesafari') {
-        updateSizes();
-        myScroll.scrollToMax('400ms');
+    if (STATE.entryfocused) {
+        if (CONFIG.client == 'mobilesafari') {
+            updateSizes();
+            myScroll.scrollToMax('400ms');
+        }
+        else {
+            $('#logwrap').scrollTo('max');
+        }
     }
-    else {
-        $('#logwrap').scrollTo('max');
-    }
-    $("#entry").focus();
+    //$("#entry").focus();
 }
 
-
+function oembed(id) {
+    $('#'+id).empty().html("<img src='/img/loading-bar.gif' />");
+    $('#'+id).oembed(OEMBED[id]);
+    return false;
+}
 
 //inserts an event into the stream for display
 //the event may be a msg, join or part type
@@ -140,8 +155,35 @@ function addMessage (from, text, time, _class) {
         messageElement.addClass("personal");
     }
 
-    // replace URLs with links
+    if (CONFIG.client != 'mobilesafari') {
+        // replace URLs with links
+        var rawlinks = text.match(/(\w+):\/\/([\w.]+)\/(\S*)/g);
+
+        if (rawlinks != null && rawlinks.length > 0) {
+            for (var rl = 0; rl < rawlinks.length; rl++) {
+                rl_arr = util.frHTMLEntities(rawlinks[rl]).match(/(\w+):\/\/([\w.]+)\/(\S*)/);
+                if (
+                        rl_arr[2].toLowerCase().indexOf("youtube.com") != -1 ||
+                        rl_arr[2].toLowerCase().indexOf("twitpic.com") != -1 ||
+                        rl_arr[2].toLowerCase().indexOf("yfrog.") != -1 
+                    ) {
+                    var d = new Date();
+                    rl_id = rl_arr[2] + "-" + rl_arr[3];
+                    rl_id = rl_id.replace(/(\.|\?|\=|\&)/g,'-')+"_"+d.getTime(); // function to generate rl_id
+                    OEMBED[rl_id] = rawlinks[rl];
+                    text = text.replace(rawlinks[rl], "<span id='" + rl_id + "'><a href=\"javascript:;\" onclick=\"oembed('" + rl_id +"');\">[expand " + rl_arr[2].toLowerCase() + "]</a></span>");
+                }
+            }
+        }
+    }
+    //
+    // 1. Find all instances of links string.match(/g);
+    // 2. Filter each of the links to see if they are oEmbed compatible link[#].match(); push to array
+    // 3. add wrapper around each link found string.replace
+    // 4. dispatch oEmbed queries, callback replaces span with link to 'embed'
+    //
     text = text.replace(util.urlRE, '<a target="_blank" href="$&">$&</a>');
+    
 
     var content = '<tr>'
         + '  <td class="date">' + util.timeString(time) + '</td>'
@@ -370,6 +412,16 @@ $(document).ready(function() {
         if (!util.isBlank(msg)) send(msg);
         $("#entry").attr("value", ""); // clear the entry field.
     });
+
+    $('#entry').focus(function(e) {
+        STATE.entryfocused = true;
+        scrollDown();
+    });
+
+    $('#entry').blur(function(e) {
+        STATE.entryfocused = false;
+    });
+
 
     $("#entry-btn").click(function () {
         var msg = $("#entry").attr("value").replace("\n", "");
