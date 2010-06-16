@@ -1,12 +1,15 @@
-var CONFIG = { debug:false
-             , nick: "#"   // set in onConnect
-             , id: null    // set in onConnect
-             , last_message_time: 1
-             , focus: true //event listeners bound in onConnect
-             , unread: 0 //updated in the message-processing loop
-             };
+var CONFIG = { 
+    debug:false,
+    nick: "#",            // set in onConnect
+    id: null,             // set in onConnect
+    last_message_time: 1,
+    focus: true,          //event listeners bound in onConnect
+    unread: 0             //updated in the message-processing loop
+};
+
 var STATE = {
-    entryfocused: true
+    entryfocused: true,
+    logfocused: false
 };
 
 var OEMBED = {};
@@ -20,37 +23,28 @@ function updateUsersLink () {
 }
 
 
-
 //handles another person joining chat
 function userJoin(nick, timestamp) {
-    //put it in the stream
     addMessage(nick, "joined", timestamp, "join");
-    //if we already know about this user, ignore it
     for (var i = 0; i < nicks.length; i++) {
         if (nicks[i] == nick) return;
     }
-    //otherwise, add the user to the list
     nicks.push(nick);
-    //update the UI
     updateUsersLink();
 }
 
 
 //handles someone leaving
 function userPart(nick, timestamp) {
-    //put it in the stream
     addMessage(nick, "left", timestamp, "part");
-    //remove the user from the list
     for (var i = 0; i < nicks.length; i++) {
         if (nicks[i] == nick) {
             nicks.splice(i,1);
             break;
         }
     }
-    //update the UI
     updateUsersLink();
 }
-
 
 
 // utility functions
@@ -98,19 +92,15 @@ util = {
 };
 
 
-
 //used to keep the most recent messages visible
-function scrollDown () {
-    if (STATE.entryfocused) {
-        if (CONFIG.client == 'mobilesafari') {
-            updateSizes();
-            myScroll.scrollToMax('400ms');
-        }
-        else {
-            $('#logwrap').scrollTo('max');
-        }
+function scrollDown() {
+    if (CONFIG.client == 'mobilesafari') {
+        updateSizes();
+        myScroll.scrollToMax('400ms');
     }
-    //$("#entry").focus();
+    else {
+        $('#logwrap').scrollTo('max');
+    }
 }
 
 function oembed(id) {
@@ -164,8 +154,8 @@ function addMessage (from, text, time, _class) {
                 rl_arr = util.frHTMLEntities(rawlinks[rl]).match(/(\w+):\/\/([\w.]+)\/(\S*)/);
                 if (
                         rl_arr[2].toLowerCase().indexOf("youtube.com") != -1 ||
-                        rl_arr[2].toLowerCase().indexOf("twitpic.com") != -1 ||
-                        rl_arr[2].toLowerCase().indexOf("yfrog.") != -1 
+                        rl_arr[2].toLowerCase().indexOf("twitpic.com") != -1 
+//                        rl_arr[2].toLowerCase().indexOf("yfrog.") != -1 
                     ) {
                     var d = new Date();
                     rl_id = rl_arr[2] + "-" + rl_arr[3];
@@ -412,16 +402,6 @@ $(document).ready(function() {
         if (!util.isBlank(msg)) send(msg);
         $("#entry").attr("value", ""); // clear the entry field.
     });
-
-    $('#entry').focus(function(e) {
-        STATE.entryfocused = true;
-        scrollDown();
-    });
-
-    $('#entry').blur(function(e) {
-        STATE.entryfocused = false;
-    });
-
 
     $("#entry-btn").click(function () {
         var msg = $("#entry").attr("value").replace("\n", "");
