@@ -14,8 +14,8 @@ a:hover { text-decoration: underline; color: #aaa; }
 #connect {
     background: #22252a;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 50px;
+    left: 100px;
     height: 100%;
     padding: 1em;
     z-index: 10000001; 
@@ -42,6 +42,7 @@ a:hover { text-decoration: underline; color: #aaa; }
     }
 
     p.footnote {
+        margin-top:10px;
         font-size:12px;
         color:#aaa;
         font-style:italic;
@@ -51,7 +52,7 @@ a:hover { text-decoration: underline; color: #aaa; }
         line-height:18px;
         font-size:14px;
         color:#666;
-        margin-top:50px;
+        margin-top:20px;
         width:400px;
 
         h4 {
@@ -109,6 +110,9 @@ a:hover { text-decoration: underline; color: #aaa; }
             tr,td {
                 outline-width: 0;
                 border-width: 0;
+            }
+            td.hide {
+                opacity:0;
             }
         }
 

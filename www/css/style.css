@@ -51,8 +51,8 @@ a:hover {
 #connect {
   background: #22252a;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 50px;
+  left: 100px;
   height: 100%;
   padding: 1em;
   z-index: 10000001;
@@ -78,6 +78,7 @@ a:hover {
   width: 100px;
 }
 #connect p.footnote {
+  margin-top: 10px;
   font-size: 12px;
   color: #aaaaaa;
   font-style: italic;
@@ -86,7 +87,7 @@ a:hover {
   line-height: 18px;
   font-size: 14px;
   color: #666666;
-  margin-top: 50px;
+  margin-top: 20px;
   width: 400px;
 }
 #connect div.disclaimer h4 {
@@ -141,6 +142,7 @@ a:hover {
   outline-width: 0;
   border-width: 0;
 }
+#logwrap #log table td.hide { opacity: 0; }
 #logwrap #log .message {
   margin: 0.1em 0;
   margin-left: 10px;

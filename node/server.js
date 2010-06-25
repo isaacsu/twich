@@ -1,6 +1,6 @@
 var HOST = null,
     PORT = 443,
-    MESSAGE_BACKLOG = 200,
+    MESSAGE_BACKLOG = 40,
     SESSION_TIMEOUT = 60 * 1000,
 
     ts   = require("./lib/timestamp"),

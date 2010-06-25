@@ -9,7 +9,9 @@ var CONFIG = {
 
 var STATE = {
     entryfocused: true,
-    logfocused: false
+    logfocused: false,
+    prevTime: '',
+    prevNick: ''
 };
 
 var OEMBED = {};
@@ -25,7 +27,11 @@ function updateUsersLink () {
 
 //handles another person joining chat
 function userJoin(nick, timestamp) {
+    STATE.prevNick = '';
+    STATE.prevTime = '';
     addMessage(nick, "joined", timestamp, "join");
+    STATE.prevNick = '';
+    STATE.prevTime = '';
     for (var i = 0; i < nicks.length; i++) {
         if (nicks[i] == nick) return;
     }
@@ -36,7 +42,11 @@ function userJoin(nick, timestamp) {
 
 //handles someone leaving
 function userPart(nick, timestamp) {
+    STATE.prevNick = '';
+    STATE.prevTime = '';
     addMessage(nick, "left", timestamp, "part");
+    STATE.prevNick = '';
+    STATE.prevTime = '';
     for (var i = 0; i < nicks.length; i++) {
         if (nicks[i] == nick) {
             nicks.splice(i,1);
@@ -88,6 +98,13 @@ util = {
       var ta=document.createElement("textarea");
       ta.innerHTML=str.replace(/</g,"&lt;").replace(/>/g,"&gt;");
       return ta.value;
+    },
+
+    dupeCheck: function(str, prev) {
+        if (str != prev) {
+            return str;
+        }
+        return '';
     }
 };
 
@@ -99,7 +116,7 @@ function scrollDown() {
         myScroll.scrollToMax('400ms');
     }
     else {
-        $('#logwrap').scrollTo('max');
+        $('#logwrap').scrollTo({top:'100%',left:'0%'});
     }
 }
 
@@ -174,10 +191,16 @@ function addMessage (from, text, time, _class) {
     //
     text = text.replace(util.urlRE, '<a target="_blank" href="$&">$&</a>');
     
+    var curTime = util.timeString(time);
+    var curNick = util.toStaticHTML(from);
+    var hideTime = (curTime == STATE.prevTime) ? ' hide' : '';
+    var hideNick = (curNick == STATE.prevNick) ? ' hide' : '';
+    STATE.prevTime = curTime;
+    STATE.prevNick = curNick;
 
     var content = '<tr>'
-        + '  <td class="date">' + util.timeString(time) + '</td>'
-        + '  <td class="nick">' + util.toStaticHTML(from) + '</td>'
+        + '  <td class="date' + hideTime + '">' + curTime + '</td>'
+        + '  <td class="nick' + hideNick + '">' + curNick + '</td>'
         + '  <td class="msg-text">' + text  + '</td>'
         + '</tr>'
         ;
@@ -187,6 +210,9 @@ function addMessage (from, text, time, _class) {
     $("#log").append(messageElement);
 
     //always view the most recent message when it is added
+    STATE.prevNick = util.toStaticHTML(from);
+    STATE.prevTime = util.timeString(time);
+
     scrollDown();
 }
 
@@ -353,6 +379,7 @@ function onConnect (session) {
 
     //update the UI to show the chat
     showChat(CONFIG.nick);
+    setTimeout(function() {if (nicks.length > 1) {addMessage('twich tip:', 'Create your own twich by just opening http://twich.me/' + CONFIG.nick,null,'notice')}},3000);
     //addMessage('twichEvent', 'Masterchef twich tonight at 7.30PM http://twich.me/masterchef',null,'notice');
 
     //listen for browser events so we know to update the document title
@@ -374,6 +401,9 @@ function onConnect (session) {
 function outputUsers () {
     var nick_string = nicks.length > 0 ? nicks.join(", ") : "(none)";
     addMessage("users:", nick_string, new Date(), "notice");
+    if (nicks.length == 1) {
+        addMessage("twich tip:", 'Invite others to this twich by sharing this link http://twich.me/' + CONFIG.room,null, 'notice');
+    }
     return false;
 }
 
@@ -461,6 +491,28 @@ $(document).ready(function() {
     // remove fixtures
     $("#log table").remove();
 
+    jQuery.ajax({ cache: false
+                , type: "GET"
+                , dataType: "json"
+                , url: CONFIG.node_url + "/who?jp=?"
+                , data: {nick: CONFIG.nick, room: CONFIG.room}
+                , success: function(session) {
+                    nicks = session.nicks;
+                    numusers = nicks.length.toString();
+                    if (numusers > 0) {
+                        $('#roomusercount').show();
+                        var nick_string =  nicks.join(" ");
+                        $('#roomuserlist').html(nick_string);
+                        if (numusers == 1) {
+                            $('#roomusercount .count').html(numusers + " user");
+                        }
+                        else {
+                            $('#roomusercount .count').html(numusers + " users");
+                        }
+                    }
+                }
+    });
+
     //begin listening for updates right away
     //interestingly, we don't need to join a room to get its updates
     //we just don't show the chat stream to the user until we create a session
@@ -468,6 +520,9 @@ $(document).ready(function() {
 
     showConnect();
     //showChat();
+
+
+
 });
 
 //if we can, notify the server that we're going away.

@@ -4,4 +4,4 @@
 <script type="text/javascript" src="/js/jquery.oembed.min.js"></script>
 <script type="text/javascript" src="/js/iscroll-z.js"></script>
 <script type="text/javascript" src="/js/client.js?<?php echo time(); ?>"></script>
-<link rel="stylesheet" type="text/css" href="/css/style.css" />
+<link rel="stylesheet" type="text/css" href="/css/style.css?<?php echo time(); ?>" />

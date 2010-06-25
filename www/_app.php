@@ -8,27 +8,38 @@
                     <?php echo $_SERVER['SERVER_NAME']?>/<span style='color:#fff'><?php echo $_GET['room']?></span>
                 </h1>
                 <p>
-                    Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich room.<br />
-                    Twich is a super-quick way to start chatting with friends.
+&nbsp;<br />
+<?php /*
+Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich room.<br />
+ */?>
+                    Twich is a super easy way to start a <br />real-time chat with anyone.
                 </p>
                 <p>
-                    You're probably here because someone wanted to chat with you. <br />
-                    Just enter your name below to continue.
+                    Just enter your name to start chatting.
                 </p>
 
-                <form action="#">
-                    <fieldset> 
-                        <label for="nick">Your Name&nbsp;</label>
-                        <input id="nickInput" class="text"type="text" name="nick" value=""/>
-                        <input id="connectButton" class="button" type="submit" name="" value="Enter" />
-                    </fieldset>
-                </form>
 
-                <p class='footnote'>
-                    No pesky signups or registration forms - how delightful!
-                </p>
+                <div style='margin-top:10px'>
+                    <form action="#">
+                        <fieldset> 
+                            <label for="nick">Name&nbsp;</label><br />
+                            <input id="nickInput" class="text"type="text" name="nick" value=""/>
+                            <input id="connectButton" class="button" type="submit" name="" value="Enter" />
+                        </fieldset>
+                    </form>
+
+                    <p class='footnote'>
+                        No signup or registration forms - delight!
+                    </p>
+                </div>
+
+                <p id='roomusercount' style='display:none;color:#666'>&nbsp;<br /><span class='count' style=''>0 users</span> currently in this room<br />
+
+                <span style='color:#ccc;font-weight:bold' id='roomuserlist'>isaacsu boo iamlauz chris aun</span>
+</p>
 
                 <div class='disclaimer'>
+<?php /*
                     <h4>Disclaimer</h4>
                     <p> Please be advised that <span style='color:#aaa'>twich.me</span> is still under active development, so please do not rely on it to launch space shuttles, yet. You have been warned.</p>
                     <p> Some other issues that have come up: (17-May-2010) </p>
@@ -36,6 +47,7 @@
                         <li>Layout does not work well in those Internet Explorer things. <br />
                         (Please use a real browser like <a href='http://www.mozilla.com/firefox/'>Firefox</a>, <a href='http://google.com/chrome'>Chrome</a>, or <a href='http://apple.com/safari'>Safari</a>)</li>
                     </ul>
+ */ ?>
                     <p><span style='#aaa'>twich.me</span> is developed by <span style='color:#aaa'>isaac@pregnate.com.au</span> </p>
                 </div>
             </div> <?php // end of connect ?>
