@@ -20,7 +20,7 @@ var nicks = [];
 //updates the users link to reflect the number of active users
 function updateUsersLink () {
     var t = nicks.length.toString() + " user";
-    if (nicks.length != 1) t += "s";
+    if (nicks.length != 1) { t += "s"; }
     $("#usersLink").text(t);
 }
 
@@ -33,7 +33,7 @@ function userJoin(nick, timestamp) {
     STATE.prevNick = '';
     STATE.prevTime = '';
     for (var i = 0; i < nicks.length; i++) {
-        if (nicks[i] == nick) return;
+        if (nicks[i] == nick) {return;}
     }
     nicks.push(nick);
     updateUsersLink();
@@ -402,7 +402,7 @@ function outputUsers () {
     var nick_string = nicks.length > 0 ? nicks.join(", ") : "(none)";
     addMessage("users:", nick_string, new Date(), "notice");
     if (nicks.length == 1) {
-        addMessage("twich tip:", 'Invite others to this twich by sharing this link http://twich.me/' + CONFIG.room,null, 'notice');
+        addMessage("twich tip:", 'Invite others to join by sharing this link http://twich.me/' + CONFIG.room,null, 'notice');
     }
     return false;
 }
