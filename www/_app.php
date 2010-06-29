@@ -20,7 +20,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
 
 
                 <div style='margin-top:10px'>
-                    <form action="#">
+                    <form id='connectForm' action="#">
                         <fieldset> 
                             <label for="nick">Name&nbsp;</label><br />
                             <input id="nickInput" class="text"type="text" name="nick" value=""/>

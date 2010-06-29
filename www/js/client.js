@@ -423,6 +423,40 @@ function who () {
     });
 }
 
+function signin() {
+    //lock the UI while waiting for a response
+    showLoad();
+    var nick = $("#nickInput").attr("value");
+
+    //dont bother the backend if we fail easy validations
+    if (nick.length > 50) {
+        alert("Nick too long. 50 character max.");
+        showConnect();
+        return false;
+    }
+
+    //more validations
+    if (/[^\w_\-^!]/.exec(nick)) {
+        alert("Bad character in nick. Can only have letters, numbers, and '_', '-', '^', '!'");
+        showConnect();
+        return false;
+    }
+
+    //make the actual join request to the server
+    $.ajax({ cache: false
+           , type: "GET" // XXX should be POST
+           , dataType: "json"
+           , url: CONFIG.node_url + "/join?jp=?"
+           , data: { nick: nick , room: CONFIG.room}
+           , error: function (session) {
+               alert("error " + session.error);
+               showConnect();
+             }
+           , success: onConnect
+           });
+    return false;
+}
+
 $(document).ready(function() {
 
     //submit new messages when the user hits enter if the message isnt blank
@@ -443,36 +477,18 @@ $(document).ready(function() {
 
     //try joining the chat when the user clicks the connect button
     $("#connectButton").click(function () {
-        //lock the UI while waiting for a response
-        showLoad();
-        var nick = $("#nickInput").attr("value");
+        signin();
+        return false;
+    });
 
-        //dont bother the backend if we fail easy validations
-        if (nick.length > 50) {
-            alert("Nick too long. 50 character max.");
-            showConnect();
-            return false;
-        }
+    $("#connectForm").submit(function () {
+        signin();
+        return false;
+    });
 
-        //more validations
-        if (/[^\w_\-^!]/.exec(nick)) {
-            alert("Bad character in nick. Can only have letters, numbers, and '_', '-', '^', '!'");
-            showConnect();
-            return false;
-        }
-
-        //make the actual join request to the server
-        $.ajax({ cache: false
-               , type: "GET" // XXX should be POST
-               , dataType: "json"
-               , url: CONFIG.node_url + "/join?jp=?"
-               , data: { nick: nick , room: CONFIG.room}
-               , error: function (session) {
-                   alert("error " + session.error);
-                   showConnect();
-                 }
-               , success: onConnect
-               });
+    $("#nickInput").keypress(function (e) {
+        if (e.keyCode != 13) {return;}
+        signin();
         return false;
     });
 
