@@ -1,4 +1,8 @@
-<?php include '_config.php' ?>
+<?php 
+    if (strstr($_SERVER['QUERY_STRING'], '&logout')) {
+        header('Location: http://' . $_SERVER['SERVER_NAME'] . '/' . $_GET['room']);
+    }
+    include '_config.php' ?>
     <head>
         <?php include '_head.php' ?>
     </head>

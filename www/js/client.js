@@ -316,6 +316,7 @@ function showConnect () {
     $("#connect").show();
     $("#loading").hide();
     $("#toolbar").hide();
+    $("#logwrap").hide();
     $("#nickInput").focus();
 }
 
@@ -376,6 +377,8 @@ function onConnect (session) {
 
     CONFIG.nick = session.nick;
     CONFIG.id   = session.id;
+
+    $.cookie('stored_nick',session.nick,{expires:28});
 
     //update the UI to show the chat
     showChat(CONFIG.nick);
@@ -465,6 +468,9 @@ function signin() {
 
 $(document).ready(function() {
 
+    if ($.cookie('stored_nick')) {
+        $('#nickInput').val($.cookie('stored_nick'));
+    }
     //submit new messages when the user hits enter if the message isnt blank
     $("#entry").keypress(function (e) {
         if (e.keyCode != 13 /* Return */) return;

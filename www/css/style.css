@@ -126,6 +126,15 @@ a:hover {
   height: 100px;
   overflow: auto;
 }
+#logwrap #logout {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 60px;
+  text-align: right;
+  padding-top: 10px;
+  padding-right: 20px;
+}
 #logwrap #log table {
   font-size: 14px;
   line-height: 20px;

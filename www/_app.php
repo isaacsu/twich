@@ -66,6 +66,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
 ********************/ 
 ?>
 <div id='logwrap'>
+            <div id='logout'><a href='?logout'>Logout</a></div>
             <div id="log">
 <?php if (false) { ?>
                 <table class="message"><tr><td class="date">18:58</td><td valign="top" class="nick">TTilus</td>
