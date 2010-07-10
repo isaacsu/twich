@@ -378,6 +378,10 @@ function onConnect (session) {
     CONFIG.nick = session.nick;
     CONFIG.id   = session.id;
 
+    if (_gaq) {
+        _gaq.push(['_trackEvent', CONFIG.room, 'Join', CONFIG.nick]);
+    }
+
     $.cookie('stored_nick',session.nick,{expires:28});
 
     //update the UI to show the chat
@@ -464,6 +468,15 @@ function signin() {
            , success: onConnect
            });
     return false;
+}
+
+function signout() {
+    if (pageTracker) {
+        pageTracker.push(['_trackEvent', CONFIG.room, 'Leave', CONFIG.nick]);
+    }
+
+    jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) { }, "json");
+    return true;
 }
 
 $(document).ready(function() {
