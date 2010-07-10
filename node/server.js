@@ -1,6 +1,7 @@
 var HOST = null,
     PORT = 443,
     MESSAGE_BACKLOG = 40,
+    MESSAGE_TRUNCATE = 2000,
     SESSION_TIMEOUT = 60 * 1000,
 
     ts   = require("./lib/timestamp"),
@@ -21,6 +22,11 @@ var channel = new function() {
 
     this.appendMessage = 
         function (nick, room, type, text) {
+            
+            if (type == 'msg' && text.length > MESSAGE_TRUNCATE) {
+                text = text.substr(0,MESSAGE_TRUNCATE) + "... (trunc.)";
+            }
+            
             var m = { 
                       nick: nick
                     , type: type // "msg", "join", "part"
@@ -72,7 +78,7 @@ var channel = new function() {
 
 
 function createSession (nick, room) {
-    if (nick.length > 50) return null;
+    if (nick.length < 3 || nick.length > 20) return null;
     if (/[^\w_\-^!]/.exec(nick)) return null;
 
     for (var i in sessions) {
@@ -169,6 +175,8 @@ http.createServer(new Sherpa.interfaces.NodeJs([
                 SimpleJSONP(200, {error: "Nick in use"},res,req);
                 return;
             }
+
+            log('sjo <' + room + '/' + nick + '> ' + req.connection.remoteAddress);
 
             channel.appendMessage(session.nick, session.room, "join");
             SimpleJSONP(200, { id: session.id, nick: session.nick},res,req);

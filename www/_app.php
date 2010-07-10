@@ -23,7 +23,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
                     <form id='connectForm' action="#">
                         <fieldset> 
                             <label for="nick">Name&nbsp;</label><br />
-                            <input id="nickInput" class="text"type="text" name="nick" value=""/>
+                            <input id="nickInput" class="text" maxlength='20' type="text" name="nick" value=""/>
                             <input id="connectButton" class="button" type="submit" name="" value="Enter" />
                         </fieldset>
                     </form>
@@ -67,6 +67,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
 ?>
 <div id='logwrap'>
             <div id="log">
+<?php if (false) { ?>
                 <table class="message"><tr><td class="date">18:58</td><td valign="top" class="nick">TTilus</td>
                         <td class="msg-text">x6a616e: i think you can, there was some weird #send trick to do that</td>
                 </tr></table>
@@ -218,6 +219,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
                             more.
                         </td>
                 </tr></table>
+<?php } ?>
             </div> <?php // end of log ?>
             </div><?php // end of logwrap ?>
 
@@ -231,7 +233,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
                     <li class="date" id="currentTime">12:59</li>
                     <li id='currentUsers'><a id="usersLink" href="#">5 users</a></li>
                 </ul>
-                <input tabindex="1" type="text" id="entry"/>
+                <input tabindex="1" maxlength='2000' type="text" id="entry" />
                 <input id='entry-btn' type='button' value='Send' />
             </div> <?php //end of toolbar ?>
 

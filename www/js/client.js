@@ -429,8 +429,14 @@ function signin() {
     var nick = $("#nickInput").attr("value");
 
     //dont bother the backend if we fail easy validations
-    if (nick.length > 50) {
-        alert("Nick too long. 50 character max.");
+    if (nick.length < 3) {
+        alert("Nick too short. 3 characters minimum.");
+        showConnect();
+        return false;
+    }
+
+    if (nick.length > 20) {
+        alert("Nick too long. 20 character max.");
         showConnect();
         return false;
     }
@@ -485,6 +491,7 @@ $(document).ready(function() {
         signin();
         return false;
     });
+    
 
     $("#nickInput").keypress(function (e) {
         if (e.keyCode != 13) {return;}
