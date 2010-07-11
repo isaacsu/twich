@@ -172,7 +172,7 @@ function addMessage (from, text, time, _class) {
                 if (
                         rl_arr[2].toLowerCase().indexOf("youtube.com") != -1 ||
                         rl_arr[2].toLowerCase().indexOf("twitpic.com") != -1 
-//                        rl_arr[2].toLowerCase().indexOf("yfrog.") != -1 
+//                      rl_arr[2].toLowerCase().indexOf("yfrog.") != -1 
                     ) {
                     var d = new Date();
                     rl_id = rl_arr[2] + "-" + rl_arr[3];
@@ -311,6 +311,7 @@ function send(msg) {
 }
 
 
+
 //Transition the page to the state that prompts the user for a nickname
 function showConnect () {
     $("#connect").show();
@@ -330,6 +331,7 @@ function showLoad () {
 }
 
 
+
 //transition the page to the main chat view, putting the cursor in the textfield
 function showChat (nick) {
     $("#toolbar").show();
@@ -337,7 +339,6 @@ function showChat (nick) {
     $("#connect").hide();
     $("#loading").hide();
     $('#logwrap').show();
-
     scrollDown();
 }
 
@@ -471,15 +472,14 @@ function signin() {
 }
 
 function signout() {
-    if (pageTracker) {
-        pageTracker.push(['_trackEvent', CONFIG.room, 'Leave', CONFIG.nick]);
+    if (_gaq) {
+        _gaq.push(['_trackEvent', CONFIG.room, 'Leave', CONFIG.nick]);
     }
-
-    jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) { }, "json");
-    return true;
+    jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) {document.location.href='/' + CONFIG.room + '?logout'; }, "json");
+    return false;
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
 
     if ($.cookie('stored_nick')) {
         $('#nickInput').val($.cookie('stored_nick'));
