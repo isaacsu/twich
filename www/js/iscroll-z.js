@@ -96,11 +96,11 @@ iScroll.prototype = {
 		}
 	},
 
-    x: function() {
+    get x() {
 		return this._x;
 	},
 
-    y: function() {
+    get y() {
 		return this._y;
 	},
 

@@ -1,3 +1,4 @@
+<?php $CLIENT = 'mobilesafari' ?>
 <?php include '_config.php' ?>
     <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -70,10 +71,10 @@
 
             #toolbar {
                 background:#777;
-                height:35px;
+                height:57px;
             }
             #toolbar #status {
-                display:none !important;
+                /*display:none !important;*/
             }
         </style>
     </head>
@@ -106,7 +107,7 @@
                 });
 
                 function updateSizes() {
-                    $('#logwrap').height(($(window).height() - 35 -3) + "px");
+                    $('#logwrap').height(($(window).height() - 57 -3) + "px");
                     $('#entry').width(($(window).width() - 90) + "px");
                     setTimeout(function(){myScroll.scrollToMax('1000ms');},1000);
                 }
