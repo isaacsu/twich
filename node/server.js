@@ -1,81 +1,22 @@
 var HOST = null,
     PORT = 443,
-    MESSAGE_BACKLOG = 40,
-    MESSAGE_TRUNCATE = 2000,
+    MSG_BACKLOG = 40,
+    MSG_TRUNCATE = 2000,
     SESSION_TIMEOUT = 60 * 1000,
 
     ts   = require("./lib/timestamp"),
     sys  = require("sys"),
     url  = require("url"),
     http = require("http"),
-    qs   = require("querystring");
+    qs   = require("querystring"),
+    ch   = require("./lib/channel").channel(MSG_BACKLOG, MSG_TRUNCATE);
 
     require ('./lib/sherpa');
     require ('./lib/log');
     require ('./lib/simplejsonp');
 
-var sessions = {};
-
-var channel = new function() {
-    var messages  = [],
-        callbacks = [];
-
-    this.appendMessage = 
-        function (nick, room, type, text) {
-            
-            if (type == 'msg' && text.length > MESSAGE_TRUNCATE) {
-                text = text.substr(0,MESSAGE_TRUNCATE) + "... (trunc.)";
-            }
-            
-            var m = { 
-                      nick: nick
-                    , type: type // "msg", "join", "part"
-                    , text: text
-                    , room: room
-                    , timestamp: (new Date()).getTime()
-            };
-
-            mlog(m);
-
-            messages.push( m );
-
-            while (callbacks.length > 0) {
-                callbacks.shift().callback([m]);
-            }
-
-            while (messages.length > MESSAGE_BACKLOG) {
-                messages.shift();
-            }
-        };
-
-    this.query = 
-        function (room, since, callback) {
-            var matching = [];
-            for (var i = 0; i < messages.length; i++) {
-                var message = messages[i];
-                if (message.timestamp > since && room == message.room) {
-                    matching.push(message)
-                }
-            }
-
-            if (matching.length != 0) {
-                callback(matching);
-            } 
-            else {
-                callbacks.push({ timestamp: new Date(), callback: callback });
-            }
-        };
-
-    // clear old callbacks older than 25 seconds (lowered from 30 seconds to get round rmit proxy server's 30sec timeout
-    setInterval(function () {
-        var now = new Date();
-        while (callbacks.length > 0 && now - callbacks[0].timestamp > 25*1000) {
-            callbacks.shift().callback([]);
-        }
-    }, 3000);
-
-};
-
+    var sessions = {};
+    ch.init();
 
 function createSession (nick, room) {
     if (nick.length < 3 || nick.length > 20) return null;
@@ -97,7 +38,7 @@ function createSession (nick, room) {
         },
 
         destroy: function () {
-            channel.appendMessage(session.nick,session.room, "part");
+            ch.appendMessage(session.nick,session.room, "part");
             delete sessions[session.id];
         }
     };
@@ -178,7 +119,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
 
             log('sjo <' + room + '/' + nick + '> ' + req.connection.remoteAddress);
 
-            channel.appendMessage(session.nick, session.room, "join");
+            ch.appendMessage(session.nick, session.room, "join");
             SimpleJSONP(200, { id: session.id, nick: session.nick},res,req);
         }
     ],
@@ -213,7 +154,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
 
             var since = parseInt(qs.parse(url.parse(req.url).query).since, 10);
 
-            channel.query(room, since, function (messages) {
+            ch.query(room, since, function (messages) {
                 if (session) session.poke();
                 var matching = [];
 
@@ -242,7 +183,7 @@ http.createServer(new Sherpa.interfaces.NodeJs([
 
             session.poke();
 
-            channel.appendMessage(session.nick,room, "msg", text);
+            ch.appendMessage(session.nick,room, "msg", text);
             SimpleJSONP(200, {},res,req);
         }
     ]

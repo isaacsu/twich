@@ -379,9 +379,10 @@ function onConnect (session) {
     CONFIG.nick = session.nick;
     CONFIG.id   = session.id;
 
-    if (_gaq) {
+    //if (_gaq) {
+    try {
         _gaq.push(['_trackEvent', CONFIG.room, 'Join', CONFIG.nick]);
-    }
+    } catch(e) {}
 
     $.cookie('stored_nick',session.nick,{expires:28});
 
@@ -472,9 +473,9 @@ function signin() {
 }
 
 function signout() {
-    if (_gaq) {
+    try {
         _gaq.push(['_trackEvent', CONFIG.room, 'Leave', CONFIG.nick]);
-    }
+    } catch (e) {}
     jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) {document.location.href='/' + CONFIG.room + '?logout'; }, "json");
     return false;
 }
