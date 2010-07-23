@@ -1,3 +1,4 @@
+<?php $CLIENT = '' ?>
 <?php 
     if (strstr($_SERVER['QUERY_STRING'], '&logout')) {
         header('Location: http://' . $_SERVER['SERVER_NAME'] . '/' . $_GET['room']);
