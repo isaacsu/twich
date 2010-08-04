@@ -11,7 +11,9 @@ var STATE = {
     entryfocused: true,
     logfocused: false,
     prevTime: '',
-    prevNick: ''
+    prevNick: '',
+    msgs: [],
+    msgs_txt: ''
 };
 
 var OEMBED = {};
@@ -205,6 +207,8 @@ function addMessage (from, text, time, _class) {
         + '</tr>'
         ;
     messageElement.html(content);
+        STATE.msgs.push(content);
+        STATE.msgs_txt = STATE.msgs_txt + content;
 
     //the log is the stream that we view
     $("#log").append(messageElement);
@@ -303,6 +307,11 @@ function longPoll (data) {
 
 //submit a new message to the server
 function send(msg) {
+    if (msg == '/print') {
+        print();
+        return false;
+    } 
+
     if (CONFIG.debug === false) {
         // XXX should be POST
         // XXX should add to messages immediately
@@ -478,6 +487,28 @@ function signout() {
     } catch (e) {}
     jQuery.get(CONFIG.node_url + "/part?jp=?", {id: CONFIG.id}, function (data) {document.location.href='/' + CONFIG.room + '?logout'; }, "json");
     return false;
+}
+
+function print() {
+    var form = document.createElement("form");
+    form.setAttribute("style","display:none");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", "print.php");
+    form.setAttribute("target", "_blank");
+    var hfContent = document.createElement("input");              
+    hfContent.setAttribute("name", "content");
+    hfContent.setAttribute("value", STATE.msgs_txt);
+    form.appendChild(hfContent);
+    var hfHost = document.createElement("input");              
+    hfHost.setAttribute("name", "host");
+    hfHost.setAttribute("value", CONFIG.host);
+    form.appendChild(hfHost);
+    var hfRoom = document.createElement("input");              
+    hfRoom.setAttribute("name", "room");
+    hfRoom.setAttribute("value", CONFIG.room);
+    form.appendChild(hfRoom);
+    document.body.appendChild(form);
+    form.submit();
 }
 
 $(document).ready(function () {
