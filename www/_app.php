@@ -48,7 +48,9 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
                         (Please use a real browser like <a href='http://www.mozilla.com/firefox/'>Firefox</a>, <a href='http://google.com/chrome'>Chrome</a>, or <a href='http://apple.com/safari'>Safari</a>)</li>
                     </ul>
  */ ?>
-                    <p><span style='#aaa'>twich.me</span> is developed by <span style='color:#aaa'>isaac@pregnate.com.au</span> </p>
+                    <p>twich.me is developed by <span style='color:#aaa'>Isaac Su</span><br />
+                       email <a href='mailto:isaac@pregnate.com.au'>isaac@pregnate.com.au</a> or follow <a href='http://bit.ly/twisaaacsu' target='_blank'>@isaacsu</a></p>
+
                 </div>
             </div> <?php // end of connect ?>
 
@@ -66,7 +68,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
 ********************/ 
 ?>
 <div id='logwrap'>
-<?php if ($CLIENT != 'mobilesafari') { ?><div id='logout'><a onclick='signout()' href='#'>Logout</a></div> <?php } ?>
+<?php if (true || $CLIENT != 'mobilesafari') { ?><div id='logout'><a onclick='signout()' href='#'>Logout</a></div> <?php } ?>
             <div id="log">
 <?php if (false) { ?>
                 <table class="message"><tr><td class="date">18:58</td><td valign="top" class="nick">TTilus</td>

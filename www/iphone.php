@@ -9,11 +9,13 @@
         <style type='text/css'>
             html{-webkit-text-size-adjust:none;-webkit-touch-callout:none;height:100%}
             #connect {
+                top:0px;
+                left:20px;
                 width:100%;
                 font-size:12px;
             }
             #connect h1 {
-                font-size:20px;
+                font-size:22px;
             }
 
             #connect p {
@@ -22,7 +24,7 @@
             }   
 
             #connect label {
-                display:block;
+                /*display:block;*/
                 clear:both;
             }
 
@@ -41,10 +43,11 @@
                 display:none;
             }
             
+            /*
             div.disclaimer {
                 display:none;
             }
-
+*/
             #app #logwrap {
                 position:relative;
                 z-index:1;
