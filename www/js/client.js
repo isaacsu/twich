@@ -164,7 +164,7 @@ function addMessage (from, text, time, _class) {
         messageElement.addClass("personal");
     }
 
-    if (CONFIG.client != 'mobilesafari') {
+    if (0 && CONFIG.client != 'mobilesafari') {
         // replace URLs with links
         var rawlinks = text.match(/(\w+):\/\/([\w.]+)\/(\S*)/g);
 
@@ -398,6 +398,7 @@ function onConnect (session) {
     //update the UI to show the chat
     showChat(CONFIG.nick);
     setTimeout(function() {if (nicks.length > 1) {addMessage('twich tip:', 'Create your own twich by just opening http://twich.me/' + CONFIG.nick,null,'notice')}},3000);
+    setTimeout(function() {addMessage('twich tip:', 'Type /print to get a print/save-friendly copy of the chat',null,'notice')},3300);
     //addMessage('twichEvent', 'Masterchef twich tonight at 7.30PM http://twich.me/masterchef',null,'notice');
 
     //listen for browser events so we know to update the document title
