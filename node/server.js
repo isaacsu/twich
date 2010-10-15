@@ -1,15 +1,11 @@
-var HOST = null,
-    PORT = 443,
-    MSG_BACKLOG = 40,
-    MSG_TRUNCATE = 2000,
-    SESSION_TIMEOUT = 60 * 1000,
-
+var 
+    cfg  = require("./config").cfg(),
     ts   = require("./lib/timestamp"),
     sys  = require("sys"),
     url  = require("url"),
     http = require("http"),
     qs   = require("querystring"),
-    ch   = require("./lib/channel").channel(MSG_BACKLOG, MSG_TRUNCATE);
+    ch   = require("./lib/channel").channel(cfg.msg_backlog, cfg.msg_truncate);
 
     require ('./lib/sherpa');
     require ('./lib/log');
@@ -54,7 +50,7 @@ setInterval(function () {
         if (!sessions.hasOwnProperty(id)) continue;
         var session = sessions[id];
 
-        if (now - session.timestamp > SESSION_TIMEOUT) {
+        if (now - session.timestamp > cfg.session_timeout) {
             session.destroy();
         }
     }
@@ -188,6 +184,6 @@ http.createServer(new Sherpa.interfaces.NodeJs([
         }
     ]
 
-]).listener()).listen(PORT);
+]).listener()).listen(cfg.port);
 
-log("Server running on port " + PORT);
+log("Server running on port " + cfg.port);

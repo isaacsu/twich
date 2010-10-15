@@ -514,7 +514,10 @@ function print() {
 
 $(document).ready(function () {
 
-    if ($.cookie('stored_nick')) {
+    if (CONFIG.autouser != '' ) {
+        $('#nickInput').val(CONFIG.autouser);
+    } 
+    else if ($.cookie('stored_nick')) {
         $('#nickInput').val($.cookie('stored_nick'));
     }
     //submit new messages when the user hits enter if the message isnt blank

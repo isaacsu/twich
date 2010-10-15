@@ -10,8 +10,10 @@ NodeJs.prototype = {
   listener: function() {
     var router = new Sherpa.Router();
     var notFound = function(req, res) {
-      res.sendHeader(404, {});
-      res.finish();
+      res.writeHead(404, {});
+      res.close();
+//      res.sendHeader(404, {});
+//      res.finish();
     }
 
     for(var key in this.routes) {
