@@ -2,13 +2,15 @@
 /*******************
 * Google analytics only come up on production server
 ********************/ 
-if ($_SERVER['SERVER_NAME'] == 'twich.me') { 
+if ($_SERVER['SERVER_NAME'] == $config->domain) { 
 ?>
         <script type="text/javascript">
 
           var _gaq = _gaq || [];
-          _gaq.push(['_setAccount', 'UA-246664-21']);
-          _gaq.push(['_setDomainName', '.twich.me']);
+          var _Account = <?php echo $config->analyticsAccount ?>;
+          var _DomainName = <?php echo $config->analyticsDomainName ?>;
+          _gaq.push(['_setAccount', _Account]);
+          _gaq.push(['_setDomainName', _DomainName]);
           _gaq.push(['_trackPageview']);
 
           (function() {

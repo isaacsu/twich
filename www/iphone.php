@@ -87,10 +87,10 @@
         <script type='text/javascript'>
             CONFIG.room = '<?php echo $_GET['room']?>';
             CONFIG.host = '<?php echo $_SERVER['SERVER_NAME']?>';
-            CONFIG.port = '<?php echo $PORT ?>';
+            CONFIG.port = '<?php echo $config->port ?>';
             CONFIG.client = 'mobilesafari';
             CONFIG.protocol = '<?php echo 'http://' ;?>';
-            CONFIG.node_url = '<?php echo 'http://' . $_SERVER['SERVER_NAME'] . ':' . $PORT; ?>';
+            CONFIG.node_url = '<?php echo 'http://' . $_SERVER['SERVER_NAME'] . ':' . $config->port; ?>';
         </script>
 
         <script type='text/javascript'>

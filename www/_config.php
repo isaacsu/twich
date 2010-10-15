@@ -1,5 +1,15 @@
 <?php
-$PORT=443; 
+class Configuration {
+
+    var $port = 443;
+    var $domain = 'twich.me';
+    var $analyticsAccount = 'UA-46664-21';
+    var $analyticsDomainName = '.twich.me';
+
+}
+
+$config = new Configuration();
+
 function subtwich($_s) {
     $host_arr = explode(".",$_s);
     array_pop($host_arr);
