@@ -22,7 +22,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
                 <div style='margin-top:10px'>
                     <form id='connectForm' action="#">
                         <fieldset> 
-                            <label for="nick">Name&nbsp;</label><br />
+                            <label for="nickInput">Name&nbsp;</label><br />
                             <input id="nickInput" class="text" maxlength='20' type="text" name="nick" value=""/>
                             <input id="connectButton" class="button" type="submit" name="" value="Enter" />
                         </fieldset>
@@ -49,7 +49,7 @@ Welcome to the <span style='color:#fff'><?php echo $_GET['room']?></span> twich 
                     </ul>
  */ ?>
                     <p>twich.me is developed by <span style='color:#aaa'>Isaac Su</span><br />
-                       email <a href='mailto:isaac@pregnate.com.au'>isaac@pregnate.com.au</a> or follow <a href='http://bit.ly/twisaaacsu' target='_blank'>@isaacsu</a></p>
+                       email <a href='mailto:isaac@pregnate.com.au'>isaac@pregnate.com.au</a> or follow <a href='http://bit.ly/twisaaacsu'>@isaacsu</a></p>
 
                 </div>
             </div> <?php // end of connect ?>
