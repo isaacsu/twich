@@ -1,10 +1,10 @@
 <?php
 class Configuration {
 
-    var $port = 443;
-    var $domain = 'twich.me';
-    var $analyticsAccount = 'UA-46664-21';
-    var $analyticsDomainName = '.twich.me';
+    var $port = 443; // Port that  node server is listening on
+    var $domain = ''; //domain name of node server
+    var $analyticsAccount = ''; // Google Analytics account
+    var $analyticsDomainName = ''; // Google Analytics domain name
 
 }
 
