@@ -185,7 +185,10 @@ function longPoll (data) {
                     if(!CONFIG.focus){
                         CONFIG.unread++;
                     }
-                addMessage(message.nick, message.text, message.timestamp);
+                    if(message.nick != CONFIG.nick)
+                    {
+                        addMessage(message.nick, message.text, message.timestamp);
+                    }
                 break;
 
                 case "join":
@@ -238,7 +241,7 @@ function longPoll (data) {
 function send(msg) {
     if (CONFIG.debug === false) {
         // XXX should be POST
-        // XXX should add to messages immediately
+        addMessage(CONFIG.nick, msg, (new Date()).getTime());
         jQuery.get(CONFIG.node_url + "/send?jp=?", {id: CONFIG.id, room: CONFIG.room, text: msg}, function (data) { }, "json");
     }
 }
