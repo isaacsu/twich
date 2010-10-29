@@ -1,26 +1,34 @@
 Twich web-based chat (http://twich.me/)
-by Isaac Su (me@isaacsu.com)
+by Isaac Su (me@isaacsu.com, @isaacsu)
 
 based on http://github.com/ry/node_chat
 
-Installation
+For discussions and support please visit http://forum.twich.me/
 
-/www
+Please drop me a line when you've got a site running.
+I would love to hear of twich servers running in the wild.
+
+Installation
+------------
+
+www/
 This are a set of php scripts that serve up the client files and organize the rooms.
 
 1. Create a vhost in Apache and point it to this folder. You will require mod_rewrite for it to function properly.
 
-2. copy www/_config.php.sample to www/_config.php and enter your own configuration settings. These help to customize the javascript files that are served to the client.
+2. Copy www/_config.php.sample to www/_config.php and enter your own configuration settings. These help to customize the javascript files that are served to the client.
 
     var $port = 443; // Port that  node server is listening on
     var $domain = ''; //domain name of node server
     var $analyticsAccount = ''; // Google Analytics account
     var $analyticsDomainName = ''; // Google Analytics domain name
 
-3. /www is all set up.
+3. Edit .htaccess and put your own domain name in instead of twich.me
+
+4. www/ is all set up.
 
 
-/node
+node/
 This is the actual node server. 
 
 1. Configuration is in config.js. The only one you should be worrying about is port:443. This has to match $port in _config.php.
