@@ -68,7 +68,8 @@ util = {
         inputHtml = inputHtml.toString();
         return inputHtml.replace(/&/g, "&amp;")
                         .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;");
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;");
     }, 
 
     //pads n with zeros on the left,
