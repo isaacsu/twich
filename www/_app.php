@@ -5,7 +5,7 @@
 ?>
             <div id="connect">
                 <h1>
-                    <?php echo $_SERVER['SERVER_NAME']?>/<span style='color:#fff'><?php echo $_GET['room']?></span>
+                    <?php echo $_SERVER['SERVER_NAME']?>/<span style='color:#fff'><?php echo isset($_GET['room'])? $_GET['room']:""; ?></span>
                 </h1>
                 <p>
 &nbsp;<br />
