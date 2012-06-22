@@ -3,8 +3,9 @@
     RewriteBase /
 
     # gets rid of www prefix
-    RewriteCond %{HTTP_HOST} ^www\.twich\.me$ [NC]
-    RewriteRule ^(.*)$ http://twich.me/$1 [L,R=301]
+    RewriteCond %{HTTP_HOST} !^$
+    RewriteCond %{HTTP_HOST}  ^www.(.+)$
+    RewriteRule ^/(.*) http://%1/$1 [L,R=301]
 
     # if it's empty, forward to default room
     RewriteCond %{REQUEST_URI} ^/$
