@@ -11,7 +11,8 @@ NodeJs.prototype = {
     var router = new Sherpa.Router();
     var notFound = function(req, res) {
       res.writeHead(404, {});
-      res.close();
+      res.end(); // FIXED: TypeError: Object #<ServerResponse> has no method 'close'
+//      res.close();
 //      res.sendHeader(404, {});
 //      res.finish();
     }
